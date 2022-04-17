@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+    ports:
+      - "8080:8080"
+      - "5050:5050"
+    depends_on:
+      - mongo
+      - postgres
+
+  mongo:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: example_db
+    ports:
+      - "8085:27017"
+    healthcheck:
+      test: echo 'db.stats().ok' | mongo mongo:27017/example_db --quiet
+      start_period: 10s
+#    volumes
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - "5438:5432"
+#    volumes
