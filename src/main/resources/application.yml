@@ -1,14 +1,17 @@
 server:
-#  more ?
+  error:
+    whitelabel:
+      enabled: true
+    include-message: always
+    include-binding-errors: always
   port: 8080
 
 spring:
   data:
     mongodb:
 #      ??
-      uri: "mongodb://root:root@db:27017/"
-#     rename
-      database: example-db
+      uri: "mongodb://root:root@pdf-db:27017/"
+      database: pdf-db
 
   jpa:
     properties:
