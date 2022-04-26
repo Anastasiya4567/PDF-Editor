@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { StartPageComponent } from './start-page/start-page/start-page.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
+import {NgxPaginationModule} from "ngx-pagination";
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -15,10 +17,12 @@ import { MyProfileComponent } from './my-profile/my-profile.component';
     DashboardComponent,
     MyProfileComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        NgxPaginationModule,
+      HttpClientModule
+    ],
   providers: [CookieService],
   bootstrap: [AppComponent]
 })
