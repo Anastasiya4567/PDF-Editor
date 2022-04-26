@@ -1,20 +1,21 @@
 package com.thesis.thesis.infractructure.adapter.mongo;
 
-import org.elasticsearch.node.NodeService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-
-import javax.imageio.IIOException;
-import java.io.File;
 
 @EnableMongoRepositories
 @EnableElasticsearchRepositories
 // add (basePackages = "...")
 @Configuration
 public class MongoInfrastructureConfig {
+
+    @Bean
+    public MongoAdapter mongoAdapter(MongoTemplate mongoTemplate) {
+        return new MongoAdapter(mongoTemplate);
+    }
 
 //    @Bean
 //    NodeBuilder nodeBuilder() {

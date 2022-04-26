@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   backend:
-    build:
+    build: .
     ports:
       - "8080:8080"
       - "5050:5050"
@@ -16,7 +16,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-      MONGO_INITDB_DATABASE: example_db
+      MONGO_INITDB_DATABASE: pdf-db
     ports:
       - "8085:27017"
     healthcheck:
