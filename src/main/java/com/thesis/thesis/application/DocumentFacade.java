@@ -14,4 +14,8 @@ public class DocumentFacade {
     public Page<PDFDocumentDTO> getAllDocuments(int pageIndex, int pageSize) {
         return documentPort.getAllDocuments(pageIndex, pageSize);
     }
+
+    public void addNewDocument(PDFDocumentDTO pdfDocumentDTO) {
+        documentPort.addNewDocument(pdfDocumentDTO);
+    }
 }

@@ -20,4 +20,9 @@ public class DocumentController {
         return documentFacade.getAllDocuments(pageIndex, pageSize);
     }
 
+    @RequestMapping(value = "/newDocument", method = RequestMethod.POST)
+    public void addNewDocument(@RequestBody PDFDocumentDTO pdfDocumentDTO) {
+        documentFacade.addNewDocument(pdfDocumentDTO);
+    }
+
 }

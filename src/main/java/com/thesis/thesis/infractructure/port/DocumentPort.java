@@ -6,4 +6,6 @@ import org.springframework.data.domain.Page;
 public interface DocumentPort {
 
     Page<PDFDocumentDTO> getAllDocuments(int pageIndex, int pageSize);
+
+    void addNewDocument(PDFDocumentDTO pdfDocumentDTO);
 }

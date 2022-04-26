@@ -10,7 +10,7 @@ spring:
   data:
     mongodb:
 #      ??
-      uri: "mongodb://root:root@pdf-db:27017/"
+      uri: "mongodb://root:root@localhost:8085/"
       database: pdf-db
 
   jpa:

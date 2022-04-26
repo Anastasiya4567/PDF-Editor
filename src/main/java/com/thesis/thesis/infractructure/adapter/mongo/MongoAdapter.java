@@ -26,4 +26,9 @@ public class MongoAdapter implements DocumentPort {
         List<PDFDocumentDTO> pdfDocumentDTOList = mongoTemplate.find(pagedQuery, PDFDocumentDTO.class, "pdfDocuments");
         return new PageImpl<>(pdfDocumentDTOList);
     }
+
+    @Override
+    public void addNewDocument(PDFDocumentDTO pdfDocumentDTO) {
+        mongoTemplate.save(pdfDocumentDTO);
+    }
 }
