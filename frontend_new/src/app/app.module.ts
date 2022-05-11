@@ -9,6 +9,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
 import {NgxPaginationModule} from "ngx-pagination";
 import { HttpClientModule } from '@angular/common/http';
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { HttpClientModule } from '@angular/common/http';
         BrowserModule,
         AppRoutingModule,
         NgxPaginationModule,
-      HttpClientModule
+        HttpClientModule,
+        ReactiveFormsModule
     ],
   providers: [CookieService],
   bootstrap: [AppComponent]
