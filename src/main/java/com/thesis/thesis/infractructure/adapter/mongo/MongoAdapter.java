@@ -23,7 +23,9 @@ public class MongoAdapter implements DocumentPort {
     public Page<PDFDocumentDTO> getAllDocuments(int pageIndex, int pageSize) {
         Pageable pageable = PageRequest.of(pageIndex, pageSize);
         Query pagedQuery = new Query().with(pageable);
+        System.out.println(pagedQuery);
         List<PDFDocumentDTO> pdfDocumentDTOList = mongoTemplate.find(pagedQuery, PDFDocumentDTO.class, "pdfDocuments");
+        System.out.println(pdfDocumentDTOList);
         return new PageImpl<>(pdfDocumentDTOList);
     }
 

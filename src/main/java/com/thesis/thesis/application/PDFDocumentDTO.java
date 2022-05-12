@@ -12,4 +12,6 @@ public class PDFDocumentDTO {
         this.id = id;
         this.title = title;
     }
+
+
 }

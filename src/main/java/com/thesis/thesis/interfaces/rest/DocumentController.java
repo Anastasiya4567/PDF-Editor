@@ -3,6 +3,7 @@ package com.thesis.thesis.interfaces.rest;
 import com.thesis.thesis.application.DocumentFacade;
 import com.thesis.thesis.application.PDFDocumentDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -20,9 +21,16 @@ public class DocumentController {
         return documentFacade.getAllDocuments(pageIndex, pageSize);
     }
 
-    @RequestMapping(value = "/newDocument", method = RequestMethod.POST)
-    public void addNewDocument(@RequestBody PDFDocumentDTO pdfDocumentDTO) {
-        documentFacade.addNewDocument(pdfDocumentDTO);
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public ResponseEntity<?> addNewDocument(@RequestParam (name = "title") String title) {
+        try {
+            documentFacade.addNewDocument(title);
+            return ResponseEntity.ok("The document has added");
+        } catch (Exception exception) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: " + exception.getMessage());
+        }
     }
 
 }
