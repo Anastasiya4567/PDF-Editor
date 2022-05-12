@@ -1,7 +1,7 @@
 package com.thesis.thesis.infractructure.adapter.mongo;
 
 import com.thesis.thesis.application.PDFDocumentDTO;
-import com.thesis.thesis.infractructure.port.DocumentPort;
+import com.thesis.thesis.application.domain.DocumentPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -21,16 +21,11 @@ public class MongoAdapter implements DocumentPort {
 
     @Override
     public Page<PDFDocumentDTO> getAllDocuments(int pageIndex, int pageSize) {
-        Pageable pageable = PageRequest.of(pageIndex, pageSize);
-        Query pagedQuery = new Query().with(pageable);
-        System.out.println(pagedQuery);
-        List<PDFDocumentDTO> pdfDocumentDTOList = mongoTemplate.find(pagedQuery, PDFDocumentDTO.class, "pdfDocuments");
-        System.out.println(pdfDocumentDTOList);
-        return new PageImpl<>(pdfDocumentDTOList);
-    }
+        MongoQueryBuilder mongoQueryBuilder = new MongoQueryBuilder();
 
-    @Override
-    public void addNewDocument(PDFDocumentDTO pdfDocumentDTO) {
-        mongoTemplate.save(pdfDocumentDTO);
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+        Query pagedQuery = mongoQueryBuilder.buildQuery().with(pageable);
+        List<PDFDocumentDTO> pdfDocumentDTOList = mongoTemplate.find(pagedQuery, PDFDocumentDTO.class, "pdfDocuments");
+        return new PageImpl(pdfDocumentDTOList);
     }
 }
