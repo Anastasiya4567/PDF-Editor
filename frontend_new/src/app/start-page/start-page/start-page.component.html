@@ -4,7 +4,7 @@
 
 <div *ngIf="documents.length > 0; then showDocuments else noDocuments"></div>
 <ng-template #showDocuments>
-  <div *ngIf class="documents-card">
+  <div class="documents-card">
     <div *ngFor="let document of documents | paginate: { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }">
       <div class="card" style="margin: 30px">
         <div class="container">

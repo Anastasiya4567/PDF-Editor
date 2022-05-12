@@ -57,6 +57,7 @@ export class StartPageComponent implements OnInit {
         console.log(this.documents);
         this.totalItems = response['totalElements'];
       });
+
   }
 
   openModal() {
