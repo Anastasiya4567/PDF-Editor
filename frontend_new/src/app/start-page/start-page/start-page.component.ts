@@ -4,6 +4,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {PDFDocument} from "../../models/PDFDocument";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DocumentAddRequest} from "../../models/DocumentAddRequest";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-start-page',
@@ -18,13 +19,13 @@ export class StartPageComponent implements OnInit {
   page: number = 0;
   itemsPerPage: number = 5;
   totalItems: number = 0;
-  clicked: boolean = false;
   documentData: FormGroup;
   document: DocumentAddRequest = {title: ''};
 
   constructor(private http: HttpClient,
               private formBuilder: FormBuilder,
-              private httpClient: HttpClient) {
+              private httpClient: HttpClient,
+              private modalService: NgbModal) {
     this.documentData = this.formBuilder.group({
       title: ['', Validators.required]
     })
@@ -57,16 +58,11 @@ export class StartPageComponent implements OnInit {
         console.log(this.documents);
         this.totalItems = response['totalElements'];
       });
+
   }
 
-  openModal() {
-    this.clicked = true;
-    console.log('clicked')
-  }
-
-  closeModal() {
-    this.clicked = false;
-    console.log('closed')
+  openModal(content: any) {
+    this.modalService.open(content);
   }
 
   onSubmit() {
