@@ -22,10 +22,20 @@ public class MongoAdapter implements DocumentPort {
     @Override
     public Page<PDFDocumentDTO> getAllDocuments(int pageIndex, int pageSize) {
         MongoQueryBuilder mongoQueryBuilder = new MongoQueryBuilder();
-
         Pageable pageable = PageRequest.of(pageIndex, pageSize);
+
+        List<PDFDocumentDTO> pdfDocumentDTOList = getPageResult(pageable, mongoQueryBuilder);
+        long totalNumberOfElements = getTotalNumberOfElements(mongoQueryBuilder);
+        return new PageImpl(pdfDocumentDTOList, pageable, totalNumberOfElements);
+    }
+
+    private List<PDFDocumentDTO> getPageResult(Pageable pageable, MongoQueryBuilder mongoQueryBuilder) {
         Query pagedQuery = mongoQueryBuilder.buildQuery().with(pageable);
-        List<PDFDocumentDTO> pdfDocumentDTOList = mongoTemplate.find(pagedQuery, PDFDocumentDTO.class, "pdfDocuments");
-        return new PageImpl(pdfDocumentDTOList);
+        return mongoTemplate.find(pagedQuery, PDFDocumentDTO.class, "pdfDocuments");
+    }
+
+    private long getTotalNumberOfElements(MongoQueryBuilder mongoQueryBuilder) {
+        Query unpagedQueryForCountingPurposes =mongoQueryBuilder.buildQuery();
+        return mongoTemplate.count(unpagedQueryForCountingPurposes, PDFDocumentDTO.class, "pdfDocuments");
     }
 }
