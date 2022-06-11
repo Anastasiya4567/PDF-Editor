@@ -1,8 +1,8 @@
 package com.thesis.thesis.application;
 
 import com.thesis.thesis.application.domain.DocumentPort;
-import com.thesis.thesis.infractructure.adapter.mongo.PDFDocument;
-import com.thesis.thesis.infractructure.port.DocumentPersistencePort;
+import com.thesis.thesis.infrastructure.adapter.mongo.PDFDocument;
+import com.thesis.thesis.infrastructure.port.DocumentPersistencePort;
 import org.springframework.data.domain.Page;
 
 import java.util.UUID;

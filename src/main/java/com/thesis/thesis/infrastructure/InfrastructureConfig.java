@@ -1,4 +1,4 @@
-package com.thesis.thesis.infractructure;
+package com.thesis.thesis.infrastructure;
 
 import org.springframework.context.annotation.Configuration;
 

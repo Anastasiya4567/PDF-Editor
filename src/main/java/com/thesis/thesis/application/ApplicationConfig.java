@@ -1,7 +1,7 @@
 package com.thesis.thesis.application;
 
 import com.thesis.thesis.application.domain.DocumentPort;
-import com.thesis.thesis.infractructure.port.DocumentPersistencePort;
+import com.thesis.thesis.infrastructure.port.DocumentPersistencePort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
