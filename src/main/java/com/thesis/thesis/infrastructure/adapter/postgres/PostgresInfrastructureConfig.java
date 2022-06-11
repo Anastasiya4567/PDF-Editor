@@ -1,4 +1,4 @@
-package com.thesis.thesis.infractructure.adapter.postgres;
+package com.thesis.thesis.infrastructure.adapter.postgres;
 
 import org.springframework.context.annotation.Configuration;
 

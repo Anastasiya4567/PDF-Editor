@@ -1,4 +1,4 @@
-package com.thesis.thesis.infractructure.adapter.mongo;
+package com.thesis.thesis.infrastructure.adapter.mongo;
 
 
 import org.springframework.data.mongodb.core.query.Query;
