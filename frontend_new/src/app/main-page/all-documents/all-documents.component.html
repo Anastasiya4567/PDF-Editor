@@ -1,0 +1,23 @@
+<div *ngIf="documents.length > 0; then showDocuments else noDocuments"></div>
+<ng-template #showDocuments>
+  <div class="documents-card">
+    <div *ngFor="let document of documents | paginate: { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }">
+      <div class="card" style="margin: 30px">
+        <div class="container">
+          <div class="card-header">
+            <div style="position: relative">
+              <h5>{{document.title}}</h5>
+            </div>
+            <div class="col-md" style="height: 200px">
+              <div class="card-body">
+                <h5 class="card-title">body</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <pagination-controls class="text-center" (pageChange)="pageChange($event)"></pagination-controls>
+</ng-template>
+<ng-template #noDocuments><h5 class="text-center">No documents</h5></ng-template>

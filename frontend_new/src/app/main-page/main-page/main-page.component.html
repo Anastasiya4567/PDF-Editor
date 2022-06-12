@@ -1,0 +1,29 @@
+<button type="button" class="btn btn-primary" (click)="openModal(content)">
+  New document
+</button>
+
+<app-all-documents></app-all-documents>
+<!--<app-new-document-modal #content (newDocumentEmitter)="onSubmit($event)"></app-new-document-modal>-->
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Enter the title of new document</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modal.close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="documentData" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+      <div class="form-group">
+        <input formControlName="title" class="form-control" placeholder="Title"/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.close()">Cancel</button>
+      <div class="form-group">
+        <button class="btn btn-primary" (click)="modal.close()">Create</button>
+      </div>
+    </div>
+  </form>
+</ng-template>
+
