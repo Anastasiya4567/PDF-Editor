@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DocumentAddRequest} from "../../models/DocumentAddRequest";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {AllDocumentsComponent} from "../all-documents/all-documents.component";
+import {AllDocumentsComponent} from "../all-documents-list/all-documents-list.component";
 
 @Component({
   selector: 'app-main-page',

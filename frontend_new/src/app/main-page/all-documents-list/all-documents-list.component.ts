@@ -5,9 +5,9 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
-  selector: 'app-all-documents',
-  templateUrl: './all-documents.component.html',
-  styleUrls: ['./all-documents.component.scss']
+  selector: 'app-all-documents-list',
+  templateUrl: './all-documents-list.component.html',
+  styleUrls: ['./all-documents-list.component.scss']
 })
 export class AllDocumentsComponent implements OnInit {
 
@@ -54,9 +54,6 @@ export class AllDocumentsComponent implements OnInit {
   }
 
   editDocument(document: PDFDocument) {
-    console.log(">>> nav")
-    this.router.navigate(['document/' + document.title], {relativeTo: this.activatedRoute}).then(r => console.log("hi"))
-
-
+    this.router.navigate(['document/' + document.title], {relativeTo: this.activatedRoute})
   }
 }
