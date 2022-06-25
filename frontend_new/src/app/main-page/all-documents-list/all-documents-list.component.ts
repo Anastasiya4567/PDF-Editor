@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {PDFDocument} from "../../models/PDFDocument";
 import {Page} from "ngx-pagination/dist/pagination-controls.directive";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-all-documents',
@@ -17,7 +18,10 @@ export class AllDocumentsComponent implements OnInit {
   itemsPerPage: number = 5;
   totalItems: number = 0;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -49,4 +53,10 @@ export class AllDocumentsComponent implements OnInit {
       });
   }
 
+  editDocument(document: PDFDocument) {
+    console.log(">>> nav")
+    this.router.navigate(['document/' + document.title], {relativeTo: this.activatedRoute}).then(r => console.log("hi"))
+
+
+  }
 }
