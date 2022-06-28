@@ -8,12 +8,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @Import({InfrastructureConfig.class, ApplicationConfig.class, InterfacesConfig.class})
 public class PdfEditorApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PdfEditorApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PdfEditorApplication.class, args);
+    }
 
 }

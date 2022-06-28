@@ -1,3 +1,4 @@
+<script src="document-edition-window.component.ts"></script>
 <button class="btn btn-secondary" (click)="openModal(content)">
   Back
 </button>
@@ -7,7 +8,7 @@
 </div>
 
 <div class="text-center">
-  <button class="btn btn-success">
+  <button class="btn btn-success" [keyboardShortcut]="saveKeyboardShortcutDef" (click)="recompile()">
     Recompile
   </button>
 </div>
@@ -15,7 +16,9 @@
 <div class="container">
   <div class="row">
     <div class="col">
-      <textarea class="form-control" style="min-width: 100%; height: 100%"></textarea>
+      <form [formGroup]="sourceCode">
+        <textarea class="form-control" formControlName="text" style="min-width: 100%; height: 100%"></textarea>
+      </form>
     </div>
     <div class="col">
       PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF
@@ -30,21 +33,21 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-    <div class="modal-body">
-      <div class="form-group">
-        Do you want to save changes?
-      </div>
+  <div class="modal-body">
+    <div class="form-group">
+      Do you want to save changes?
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="modal.close(); backToMainPage()">
-        Yes
-      </button>
-      <button class="btn btn-primary" (click)="modal.close(); backToMainPage()">
-        No
-      </button>
-      <button class="btn btn-primary" (click)="modal.close()">
-        Cancel
-      </button>
-    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="saveSourceCode(); modal.close()">
+      Yes
+    </button>
+    <button class="btn btn-primary" (click)="modal.close(); backToMainPage()">
+      No
+    </button>
+    <button class="btn btn-primary" (click)="modal.close()">
+      Cancel
+    </button>
+  </div>
 </ng-template>
 

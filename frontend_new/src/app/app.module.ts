@@ -13,6 +13,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import { AllDocumentsComponent } from './main-page/all-documents-list/all-documents-list.component';
 import { NewDocumentModalComponent } from './main-page/new-document-modal/new-document-modal.component';
 import { DocumentEditionWindowComponent } from './document-edition-window/document-edition-window.component';
+import {NgxKeyboardShortcutModule} from "ngx-keyboard-shortcuts";
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { DocumentEditionWindowComponent } from './document-edition-window/docume
         AppRoutingModule,
         NgxPaginationModule,
         HttpClientModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgxKeyboardShortcutModule
     ],
   providers: [
     CookieService,

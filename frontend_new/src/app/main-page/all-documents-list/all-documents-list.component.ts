@@ -54,6 +54,7 @@ export class AllDocumentsComponent implements OnInit {
   }
 
   editDocument(document: PDFDocument) {
+    // send id also
     this.router.navigate(['document/' + document.title], {relativeTo: this.activatedRoute})
   }
 }

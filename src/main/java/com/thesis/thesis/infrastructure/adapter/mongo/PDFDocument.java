@@ -16,6 +16,9 @@ public class PDFDocument {
     @Field("title")
     public String title;
 
+    @Field("sourceCode")
+    public String sourceCode;
+
     public PDFDocument() {
     }
 
