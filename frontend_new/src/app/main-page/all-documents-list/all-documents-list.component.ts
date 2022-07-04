@@ -3,6 +3,7 @@ import {PDFDocument} from "../../models/PDFDocument";
 import {Page} from "ngx-pagination/dist/pagination-controls.directive";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-all-documents-list',
@@ -17,10 +18,12 @@ export class AllDocumentsComponent implements OnInit {
   page: number = 0;
   itemsPerPage: number = 5;
   totalItems: number = 0;
+  id: string;
 
   constructor(
     private http: HttpClient,
     private router: Router,
+    private modalService: NgbModal,
     private activatedRoute: ActivatedRoute) {
   }
 
@@ -55,6 +58,32 @@ export class AllDocumentsComponent implements OnInit {
 
   editDocument(document: PDFDocument) {
     // send id also
-    this.router.navigate(['document/' + document.title], {relativeTo: this.activatedRoute})
+    this.router.navigate(['document/' + document.title], {
+      relativeTo: this.activatedRoute,
+      state: { id: document.id }
+    })
   }
+
+  deleteDocument(modal: any) {
+    const headers = new HttpHeaders();
+
+    this.http.post(this.host + '/deleteDocument', this.id, {
+      headers: headers }).subscribe(
+      (response: any) => {
+        console.log('deleted');
+        this.getAllDocuments(0);
+      });
+
+    this.closeModal(modal);
+  }
+
+  openModal(content: any, id: string) {
+    this.id = id;
+    this.modalService.open(content);
+  }
+
+  closeModal(modal: any) {
+    modal.close();
+  }
+
 }

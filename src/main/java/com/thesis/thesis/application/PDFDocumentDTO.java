@@ -5,10 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class PDFDocumentDTO {
 
     @JsonProperty("id")
-    private String id;
+    public String id;
 
     @JsonProperty("title")
-    private String title;
+    public String title;
+
+    @JsonProperty("sourceCode")
+    public String sourceCode;
 
     public PDFDocumentDTO() {
     }

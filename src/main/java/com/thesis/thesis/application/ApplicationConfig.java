@@ -12,4 +12,9 @@ public class ApplicationConfig {
     public DocumentFacade documentFacade(DocumentPort documentPort, DocumentRepository documentRepository) {
         return new DocumentFacade(documentPort, documentRepository);
     }
+
+    @Bean
+    public DocumentEditionFacade documentEditionFacade(DocumentRepository documentRepository) {
+        return new DocumentEditionFacade(documentRepository);
+    }
 }

@@ -2,7 +2,6 @@ package com.thesis.thesis.interfaces.rest;
 
 import com.thesis.thesis.application.DocumentFacade;
 import com.thesis.thesis.application.PDFDocumentDTO;
-import com.thesis.thesis.infrastructure.adapter.mongo.PDFDocument;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +22,7 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity<?> addNewDocument(@RequestParam (name = "title") String title) {
+    public ResponseEntity<?> addNewDocument(@RequestParam(name = "title") String title) {
         try {
             documentFacade.addNewDocument(title);
             return ResponseEntity.ok("The document has added");
@@ -34,11 +33,27 @@ public class DocumentController {
         }
     }
 
-    @RequestMapping(value = "/generateFromSourceText", method = RequestMethod.POST)
-    public ResponseEntity<?> generatePDFFromSourceText(@RequestBody PDFDocument pdfDocument) {
+    @RequestMapping(value = "/getDocumentByTitle", method = RequestMethod.GET)
+    public PDFDocumentDTO getDocumentByTitle(@RequestParam(name = "title") String title) {
+        return documentFacade.getDocumentByTitle(title);
+    }
+
+    @RequestMapping(value = "/checkIfUnique", method = RequestMethod.GET)
+    public ResponseEntity<?> checkIfUnique(@RequestParam(name = "title") String title) {
         try {
-            documentFacade.generatePDFFromSourceText(pdfDocument);
-            return ResponseEntity.ok("The document has generated");
+            return ResponseEntity.ok(documentFacade.checkIfUnique(title));
+        } catch (Exception exception) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: " + exception.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/deleteDocument", method = RequestMethod.POST)
+    public ResponseEntity<?> deleteDocumentById(@RequestBody String id) {
+        try {
+            documentFacade.deleteDocumentById(id);
+            return ResponseEntity.ok("The document with id " + id + " has deleted");
         } catch (Exception exception) {
             return ResponseEntity
                     .badRequest()

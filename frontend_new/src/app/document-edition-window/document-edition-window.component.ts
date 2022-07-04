@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {DocumentAddRequest} from "../models/DocumentAddRequest";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {IKeyboardShortcutListenerOptions, KeyboardKeys} from 'ngx-keyboard-shortcuts';
+import {PDFDocument} from "../models/PDFDocument";
 
 @Component({
   selector: 'app-document-edition-window',
@@ -15,9 +15,8 @@ export class DocumentEditionWindowComponent implements OnInit {
 
   title: string | null = this.activatedRoute.snapshot.paramMap.get('title')
   host = 'http://localhost:8080';
-
+  document: PDFDocument;
   sourceCode: FormGroup;
-  document: DocumentAddRequest = {title: ''};
 
   saveKeyboardShortcutDef: IKeyboardShortcutListenerOptions = {
     description: 'recompile source code',
@@ -35,6 +34,17 @@ export class DocumentEditionWindowComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getDocumentByTitle();
+  }
+
+  private getDocumentByTitle() {
+    const headers = new HttpHeaders();
+    this.httpClient.get(this.host + '/getDocumentByTitle?title=' + this.title, {
+      headers: headers
+    }).subscribe(
+      (response: any) => {
+        this.document = response;
+      });
   }
 
   backToMainPage() {
@@ -45,14 +55,20 @@ export class DocumentEditionWindowComponent implements OnInit {
     this.modalService.open(content);
   }
 
-  saveSourceCode() {
+  closeModal(modal: any) {
+    modal.close();
+  }
+
+  saveSourceCode(modal: any) {
+    if (this.sourceCode.invalid)
+      return;
 
     const headers = new HttpHeaders();
     const newHeaders = headers.append('Content-Type', 'application/json');
     const body = {
-      id: "not set yet",
+      id: this.document.id,
       title: this.title,
-      sourceCode : this.sourceCode.value.text
+      sourceCode: this.sourceCode.value.text
     }
 
     this.httpClient.post(this.host + '/generateFromSourceText', JSON.stringify(body), {
@@ -66,6 +82,8 @@ export class DocumentEditionWindowComponent implements OnInit {
           console.log('Error saving generated document')
         }
       })
+
+    this.closeModal(modal);
   }
 
   recompile() {

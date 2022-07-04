@@ -2,21 +2,22 @@ package com.thesis.thesis.application;
 
 import com.thesis.thesis.application.domain.DocumentPort;
 import com.thesis.thesis.application.domain.DocumentRepository;
-import com.thesis.thesis.application.domain.Token;
+import com.thesis.thesis.application.mapper.DocumentMapper;
 import com.thesis.thesis.infrastructure.adapter.mongo.PDFDocument;
-import com.thesis.thesis.infrastructure.port.DocumentPersistencePort;
-import org.apache.pdfbox.pdmodel.PDDocument;
+import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class DocumentFacade {
 
     private final DocumentPort documentPort;
 
     private final DocumentRepository documentRepository;
+
+    private final DocumentMapper documentMapper = Mappers.getMapper(DocumentMapper.class);
 
     public DocumentFacade(DocumentPort documentPort, DocumentRepository documentRepository) {
         this.documentPort = documentPort;
@@ -32,19 +33,20 @@ public class DocumentFacade {
         documentRepository.save(pdfDocument);
     }
 
-    public void generatePDFFromSourceText(PDFDocument pdfDocument) throws IOException {
-        saveSourceCode(pdfDocument.id, pdfDocument.sourceCode);
-        DocumentScannerFacade documentScannerFacade = new DocumentScannerFacade(pdfDocument.sourceCode);
-        List<Token> tokens = documentScannerFacade.scan();
-        DocumentParserFacade documentParserFacade = new DocumentParserFacade(tokens);
-        PDDocument document = documentParserFacade.parse();
-        // save generated pdf
+    public PDFDocumentDTO getDocumentByTitle(String title) {
+        return documentMapper.mapFromDocument(documentRepository.findByTitle(title));
     }
 
-    @MongoTransactional
-    public void saveSourceCode(String id, String sourceCode) {
-        final var loaded = documentRepository.load(id);
-        loaded.sourceCode = sourceCode;
-        documentRepository.save(loaded);
+    public boolean checkIfUnique(String title) {
+        List<PDFDocument> documents = documentRepository.findAllDocuments();
+        return !documents.stream()
+                .map(document -> document.title)
+                .collect(Collectors.toList())
+                .contains(title);
+    }
+
+    public void deleteDocumentById(String id) {
+        System.out.println(id);
+        documentRepository.deleteById(id);
     }
 }

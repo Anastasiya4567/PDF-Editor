@@ -16,6 +16,8 @@ export class MainPageComponent implements OnInit {
   documentData: FormGroup;
   document: DocumentAddRequest = {title: ''};
 
+  isSubmitted = false;
+
   constructor(private http: HttpClient,
               private formBuilder: FormBuilder,
               private httpClient: HttpClient,
@@ -33,26 +35,54 @@ export class MainPageComponent implements OnInit {
     this.modalService.open(content);
   }
 
-  onSubmit() {
-    console.log(this.documentData.value.title)
-    // check if empty
-    this.document.title = this.documentData.value.title;
+  onSubmit(modal: any) {
+    this.isSubmitted = true;
 
-    this.sendNewDocumentRequest();
+    if (this.documentData.invalid) {
+      console.log('empty title');
+      return;
+    }
+
+    if (this.checkIfValid()) {
+      this.sendNewDocumentRequest();
+      modal.close()
+    }
   }
 
   sendNewDocumentRequest() {
     const headers = new HttpHeaders();
 
-    this.httpClient.post(this.host + '/add?title=' + this.document.title, {
+    this.httpClient.post(this.host + '/add?title=' + this.documentData.value.title, {
       headers: headers
     }).subscribe(
       (response: any) => {
         if (response.status == 200) {
-          console.log('added ' + this.document.title)
+          console.log('added ' + this.documentData.value.title)
           this.allDocumentsComponent.getAllDocuments(0)
         } else {
           console.log('Error saving new document')
+        }
+      })
+  }
+
+  closeModal(modal: any) {
+    modal.close();
+  }
+
+  checkIfValid() : any {
+    const headers = new HttpHeaders();
+
+    this.httpClient.get(this.host + '/checkIfUnique?title=' + this.documentData.value.title, {
+      headers: headers
+    }).subscribe(
+      (response: any) => {
+        console.log(response.status)
+        if (response.status == 200) {
+          console.log('checked if unique: ' + this.document.title)
+          console.log(response)
+          return response;
+        } else {
+          console.log('Error checking if new document title is unique')
         }
       })
   }

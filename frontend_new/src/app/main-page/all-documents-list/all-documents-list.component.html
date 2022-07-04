@@ -15,6 +15,7 @@
                 </h5>
                 <div class="text-center">
                   <button class="btn btn-secondary" (click)="editDocument(document)">Edit</button>
+                  <button class="btn btn btn-dark" (click)="openModal(content, document.id)">Delete</button>
                 </div>
               </div>
             </div>
@@ -26,3 +27,20 @@
   <pagination-controls class="text-center" (pageChange)="pageChange($event)"></pagination-controls>
 </ng-template>
 <ng-template #noDocuments><h5 class="text-center">No documents</h5></ng-template>
+
+<ng-template #content let-modal>
+  <div class="modal-header"></div>
+  <div class="modal-body">
+    <div class="form-group">
+      Confirm deletion
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="deleteDocument(modal)">
+      Yes
+    </button>
+    <button class="btn btn-primary" (click)="closeModal(modal)">
+      No
+    </button>
+  </div>
+</ng-template>
