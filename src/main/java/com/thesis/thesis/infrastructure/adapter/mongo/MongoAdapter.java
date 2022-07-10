@@ -20,22 +20,22 @@ public class MongoAdapter implements DocumentPort {
     }
 
     @Override
-    public Page<PDFDocumentDTO> getAllDocuments(int pageIndex, int pageSize) {
+    public Page<PDFDocumentDTO> getAllDocuments(int pageIndex, int pageSize, String title) {
         MongoQueryBuilder mongoQueryBuilder = new MongoQueryBuilder();
         Pageable pageable = PageRequest.of(pageIndex, pageSize);
 
-        List<PDFDocumentDTO> pdfDocumentDTOList = getPageResult(pageable, mongoQueryBuilder);
-        long totalNumberOfElements = getTotalNumberOfElements(mongoQueryBuilder);
+        List<PDFDocumentDTO> pdfDocumentDTOList = getPageResult(pageable, mongoQueryBuilder, title);
+        long totalNumberOfElements = getTotalNumberOfElements(mongoQueryBuilder, title);
         return new PageImpl(pdfDocumentDTOList, pageable, totalNumberOfElements);
     }
 
-    private List<PDFDocumentDTO> getPageResult(Pageable pageable, MongoQueryBuilder mongoQueryBuilder) {
-        Query pagedQuery = mongoQueryBuilder.buildQuery().with(pageable);
+    private List<PDFDocumentDTO> getPageResult(Pageable pageable, MongoQueryBuilder mongoQueryBuilder, String title) {
+        Query pagedQuery = mongoQueryBuilder.buildQuery(title).with(pageable);
         return mongoTemplate.find(pagedQuery, PDFDocumentDTO.class, "pdfDocuments");
     }
 
-    private long getTotalNumberOfElements(MongoQueryBuilder mongoQueryBuilder) {
-        Query unpagedQueryForCountingPurposes =mongoQueryBuilder.buildQuery();
+    private long getTotalNumberOfElements(MongoQueryBuilder mongoQueryBuilder, String title) {
+        Query unpagedQueryForCountingPurposes = mongoQueryBuilder.buildQuery(title);
         return mongoTemplate.count(unpagedQueryForCountingPurposes, PDFDocumentDTO.class, "pdfDocuments");
     }
 }

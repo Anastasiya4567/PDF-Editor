@@ -24,8 +24,8 @@ public class DocumentFacade {
         this.documentRepository = documentRepository;
     }
 
-    public Page<PDFDocumentDTO> getAllDocuments(int pageIndex, int pageSize) {
-        return documentPort.getAllDocuments(pageIndex, pageSize);
+    public Page<PDFDocumentDTO> getAllDocuments(int pageIndex, int pageSize, String title) {
+        return documentPort.getAllDocuments(pageIndex, pageSize, title);
     }
 
     public void addNewDocument(String title) {
@@ -37,16 +37,26 @@ public class DocumentFacade {
         return documentMapper.mapFromDocument(documentRepository.findByTitle(title));
     }
 
-    public boolean checkIfUnique(String title) {
+    public boolean isUnique(String title) {
         List<PDFDocument> documents = documentRepository.findAllDocuments();
-        return !documents.stream()
+        boolean isUnique = !(documents.stream()
                 .map(document -> document.title)
                 .collect(Collectors.toList())
-                .contains(title);
+                .contains(title));
+//        System.out.println(title);
+//        System.out.println(documents.stream()
+//                .map(document -> document.title)
+//                .collect(Collectors.toList()));
+//        System.out.println(documents.stream()
+//                .map(document -> document.title)
+//                .collect(Collectors.toList()).contains(title));
+        if (isUnique) {
+            addNewDocument(title);
+        }
+        return isUnique;
     }
 
     public void deleteDocumentById(String id) {
-        System.out.println(id);
         documentRepository.deleteById(id);
     }
 }

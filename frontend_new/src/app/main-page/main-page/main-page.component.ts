@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DocumentAddRequest} from "../../models/DocumentAddRequest";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AllDocumentsComponent} from "../all-documents-list/all-documents-list.component";
+import {DocumentService} from "../../services/document/document.service";
 
 @Component({
   selector: 'app-main-page',
@@ -22,7 +23,8 @@ export class MainPageComponent implements OnInit {
               private formBuilder: FormBuilder,
               private httpClient: HttpClient,
               private modalService: NgbModal,
-              private allDocumentsComponent: AllDocumentsComponent) {
+              private allDocumentsComponent: AllDocumentsComponent,
+              private documentService: DocumentService) {
     this.documentData = this.formBuilder.group({
       title: ['', Validators.required]
     })
@@ -43,22 +45,17 @@ export class MainPageComponent implements OnInit {
       return;
     }
 
-    if (this.checkIfValid()) {
-      this.sendNewDocumentRequest();
-      modal.close()
-    }
+    this.createNewDocument();
+    modal.close();
   }
 
-  sendNewDocumentRequest() {
-    const headers = new HttpHeaders();
-
-    this.httpClient.post(this.host + '/add?title=' + this.documentData.value.title, {
-      headers: headers
-    }).subscribe(
+  createNewDocument() {
+    this.documentService.createNewDocument(this.documentData.value.title).subscribe(
       (response: any) => {
+        console.log(response)
         if (response.status == 200) {
-          console.log('added ' + this.documentData.value.title)
-          this.allDocumentsComponent.getAllDocuments(0)
+            console.log(response.message)
+            this.allDocumentsComponent.getAllDocuments(0)
         } else {
           console.log('Error saving new document')
         }
@@ -69,21 +66,4 @@ export class MainPageComponent implements OnInit {
     modal.close();
   }
 
-  checkIfValid() : any {
-    const headers = new HttpHeaders();
-
-    this.httpClient.get(this.host + '/checkIfUnique?title=' + this.documentData.value.title, {
-      headers: headers
-    }).subscribe(
-      (response: any) => {
-        console.log(response.status)
-        if (response.status == 200) {
-          console.log('checked if unique: ' + this.document.title)
-          console.log(response)
-          return response;
-        } else {
-          console.log('Error checking if new document title is unique')
-        }
-      })
-  }
 }

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {PDFDocument} from "../../models/PDFDocument";
 import {Page} from "ngx-pagination/dist/pagination-controls.directive";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {FormControl} from "@angular/forms";
+import {DocumentService} from "../../services/document/document.service";
 
 @Component({
   selector: 'app-all-documents-list',
@@ -14,17 +16,21 @@ export class AllDocumentsComponent implements OnInit {
 
   documents: PDFDocument[] = [];
   host = 'http://localhost:8080';
-  currentPage: Page = {label: 'label', value: 1};
+  currentPage: Page;
   page: number = 0;
   itemsPerPage: number = 5;
   totalItems: number = 0;
   id: string;
+  titleFilter = new FormControl('');
+  deleted: boolean = false;
+  alertMessage: string;
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private modalService: NgbModal,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute,
+    private documentService: DocumentService) {
   }
 
   ngOnInit(): void {
@@ -39,41 +45,37 @@ export class AllDocumentsComponent implements OnInit {
   }
 
   getAllDocuments(pageNumber: number): void {
-
     // const token = this.cookieService.get('token');
     //
-    const headers = new HttpHeaders();
     // const nextHeader = headersObject.append('Content-Type', 'application/json');
     // const actualHeader = nextHeader.append('Authorization', 'Bearer ' + token);
-
-    this.http.get(this.host + '/documents/' + pageNumber + '/' + this.itemsPerPage, {
-      headers: headers }).subscribe(
+    this.documentService.getAllDocuments(pageNumber, this.itemsPerPage, this.titleFilter.value).subscribe(
       (response: any) => {
         this.currentPage = response as Page;
         this.documents = response['content'];
         console.log(this.documents);
         this.totalItems = response['totalElements'];
-      });
+      }, error => {
+        console.log(error)
+      }
+    )
   }
 
   editDocument(document: PDFDocument) {
-    // send id also
     this.router.navigate(['document/' + document.title], {
-      relativeTo: this.activatedRoute,
-      state: { id: document.id }
+      relativeTo: this.activatedRoute
     })
   }
 
   deleteDocument(modal: any) {
-    const headers = new HttpHeaders();
-
-    this.http.post(this.host + '/deleteDocument', this.id, {
-      headers: headers }).subscribe(
+    this.documentService.deleteDocument(this.id).subscribe(
       (response: any) => {
-        console.log('deleted');
+        this.alertMessage = response.message;
+        this.deleted = true;
         this.getAllDocuments(0);
-      });
-
+      }, error => {
+        console.log(error)
+    })
     this.closeModal(modal);
   }
 
@@ -86,4 +88,12 @@ export class AllDocumentsComponent implements OnInit {
     modal.close();
   }
 
+  resetFilter() {
+    this.titleFilter.reset('');
+    this.getAllDocuments(0);
+  }
+
+  clearAlert() {
+    this.deleted = false;
+  }
 }
