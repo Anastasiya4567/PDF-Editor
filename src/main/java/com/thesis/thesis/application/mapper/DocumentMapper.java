@@ -6,6 +6,5 @@ import org.mapstruct.Mapper;
 
 @Mapper
 public interface DocumentMapper {
-
     PDFDocumentDTO mapFromDocument(final PDFDocument pdfDocument);
 }

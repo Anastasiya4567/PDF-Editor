@@ -25,7 +25,9 @@
       </form>
     </div>
     <div class="col">
-      PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF PDF
+      <div *ngFor="let generatedPage of this.generatedDocument.generatedPages; let i = index" style="margin: auto">
+        <img class="image-holder border" style="max-width:100%; max-height: 100%" [src]=convertImage(generatedPage) />
+      </div>
     </div>
   </div>
 </div>

@@ -13,6 +13,9 @@ public class PDFDocumentDTO {
     @JsonProperty("sourceCode")
     public String sourceCode;
 
+    @JsonProperty("generatedDocumentId")
+    public String generatedDocumentId;
+
     public PDFDocumentDTO() {
     }
 

@@ -1,6 +1,7 @@
 package com.thesis.thesis.interfaces.rest;
 
 import com.thesis.thesis.application.DocumentFacade;
+import com.thesis.thesis.application.GeneratedDocumentDTO;
 import com.thesis.thesis.application.PDFDocumentDTO;
 import com.thesis.thesis.misc.MessageResponse;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,6 @@ public class DocumentController {
     @RequestMapping(value = "/add/{title}", method = RequestMethod.POST)
     public ResponseEntity<?> addNewDocument(@PathVariable("title") String title) {
         try {
-            System.out.println(title);
             if (documentFacade.isUnique(title)) {
                 return ResponseEntity.ok(new MessageResponse("The document with title " + title + " has added"));
             }
@@ -52,6 +52,11 @@ public class DocumentController {
                     .badRequest()
                     .body(new MessageResponse("Error: " + exception.getMessage()));
         }
+    }
+
+    @RequestMapping(value = "/getGeneratedDocument", method = RequestMethod.GET)
+    public GeneratedDocumentDTO getGeneratedDocument(@RequestParam(name = "id") String id) {
+        return documentFacade.getGeneratedDocumentById(id);
     }
 
 }

@@ -53,7 +53,7 @@ export class AllDocumentsComponent implements OnInit {
       (response: any) => {
         this.currentPage = response as Page;
         this.documents = response['content'];
-        console.log(this.documents);
+        this.page = response['number'] + 1;
         this.totalItems = response['totalElements'];
       }, error => {
         console.log(error)

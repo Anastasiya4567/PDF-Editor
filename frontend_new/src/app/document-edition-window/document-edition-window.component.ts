@@ -5,6 +5,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {IKeyboardShortcutListenerOptions, KeyboardKeys} from 'ngx-keyboard-shortcuts';
 import {PDFDocument} from "../models/PDFDocument";
+import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
+import {GeneratedDocument} from "../models/GeneratedDocument";
 
 @Component({
   selector: 'app-document-edition-window',
@@ -16,6 +18,7 @@ export class DocumentEditionWindowComponent implements OnInit {
   title: string | null = this.activatedRoute.snapshot.paramMap.get('title')
   host = 'http://localhost:8080';
   document: PDFDocument;
+  generatedDocument: GeneratedDocument;
   sourceCode: FormGroup;
 
   saveKeyboardShortcutDef: IKeyboardShortcutListenerOptions = {
@@ -27,7 +30,8 @@ export class DocumentEditionWindowComponent implements OnInit {
               private router: Router,
               private modalService: NgbModal,
               private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private sanitizer: DomSanitizer) {
     this.sourceCode = this.formBuilder.group({
       text: ['', Validators.required]
     })
@@ -37,6 +41,10 @@ export class DocumentEditionWindowComponent implements OnInit {
     this.getDocumentByTitle();
   }
 
+  convertImage(generatedPage: String) : SafeUrl {
+    return this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,' + generatedPage);
+  }
+
   private getDocumentByTitle() {
     const headers = new HttpHeaders();
     this.httpClient.get(this.host + '/getDocumentByTitle?title=' + this.title, {
@@ -44,7 +52,10 @@ export class DocumentEditionWindowComponent implements OnInit {
     }).subscribe(
       (response: any) => {
         this.document = response;
+        this.getGeneratedDocument();
+        console.log(this.document);
       });
+
   }
 
   backToMainPage() {
@@ -88,5 +99,18 @@ export class DocumentEditionWindowComponent implements OnInit {
 
   recompile() {
     console.log('recompiled')
+  }
+
+  private getGeneratedDocument() {
+    const headers = new HttpHeaders();
+    console.log(this.document.generatedDocumentId)
+
+    this.httpClient.get(this.host + '/getGeneratedDocument?id=' + this.document.generatedDocumentId, {
+      headers: headers
+    }).subscribe(
+      (response: any) => {
+        console.log(response)
+        this.generatedDocument = response;
+      })
   }
 }

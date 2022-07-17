@@ -19,12 +19,17 @@ public class PDFDocument {
     @Field("sourceCode")
     public String sourceCode;
 
+    @Field("generatedDocumentId")
+    public String generatedDocumentId;
+
     public PDFDocument() {
     }
 
     @PersistenceConstructor
-    public PDFDocument(String id, String title) {
+    public PDFDocument(String id, String title, String sourceCode, String generatedDocumentId) {
         this.id = id;
         this.title = title;
+        this.sourceCode = sourceCode;
+        this.generatedDocumentId = generatedDocumentId;
     }
 }
