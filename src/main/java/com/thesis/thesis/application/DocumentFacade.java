@@ -24,8 +24,8 @@ public class DocumentFacade {
         this.documentRepository = documentRepository;
     }
 
-    public Page<PDFDocumentDTO> getAllDocuments(int pageIndex, int pageSize, String title) {
-        return documentPort.getAllDocuments(pageIndex, pageSize, title);
+    public Page<PDFDocumentDTO> getFilteredDocuments(int pageIndex, int pageSize, String title) {
+        return documentPort.getFilteredDocuments(pageIndex, pageSize, title);
     }
 
     public void addNewDocument(String title) {

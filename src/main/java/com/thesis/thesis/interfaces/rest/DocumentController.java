@@ -18,8 +18,8 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/documents/{pageIndex}/{pageSize}", method = RequestMethod.GET)
-    public Page<PDFDocumentDTO> getAllDocuments(@PathVariable("pageIndex") int pageIndex, @PathVariable("pageSize") int pageSize, @RequestParam(name = "title") String title) {
-        return documentFacade.getAllDocuments(pageIndex, pageSize, title);
+    public Page<PDFDocumentDTO> getFilteredDocuments(@PathVariable("pageIndex") int pageIndex, @PathVariable("pageSize") int pageSize, @RequestParam(name = "title") String title) {
+        return documentFacade.getFilteredDocuments(pageIndex, pageSize, title);
     }
 
     @RequestMapping(value = "/add/{title}", method = RequestMethod.POST)
