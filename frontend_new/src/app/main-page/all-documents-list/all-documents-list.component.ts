@@ -20,10 +20,12 @@ export class AllDocumentsComponent implements OnInit {
   page: number = 0;
   itemsPerPage: number = 5;
   totalItems: number = 0;
-  id: string;
+  document: PDFDocument;
   titleFilter = new FormControl('');
   deleted: boolean = false;
   alertMessage: string;
+  newTitle = new FormControl('');
+  isSubmitted = false;
 
   constructor(
     private http: HttpClient,
@@ -31,6 +33,7 @@ export class AllDocumentsComponent implements OnInit {
     private modalService: NgbModal,
     private activatedRoute: ActivatedRoute,
     private documentService: DocumentService) {
+
   }
 
   ngOnInit(): void {
@@ -53,7 +56,8 @@ export class AllDocumentsComponent implements OnInit {
       (response: any) => {
         this.currentPage = response as Page;
         this.documents = response['content'];
-        console.log(this.documents);
+        console.log(this.documents)
+        this.page = response['number'] + 1;
         this.totalItems = response['totalElements'];
       }, error => {
         console.log(error)
@@ -68,7 +72,7 @@ export class AllDocumentsComponent implements OnInit {
   }
 
   deleteDocument(modal: any) {
-    this.documentService.deleteDocument(this.id).subscribe(
+    this.documentService.deleteDocument(this.document).subscribe(
       (response: any) => {
         this.alertMessage = response.message;
         this.deleted = true;
@@ -79,8 +83,9 @@ export class AllDocumentsComponent implements OnInit {
     this.closeModal(modal);
   }
 
-  openModal(content: any, id: string) {
-    this.id = id;
+  openModal(content: any, document: PDFDocument) {
+    this.document = document;
+    this.newTitle.setValue(document.title);
     this.modalService.open(content);
   }
 
@@ -95,5 +100,28 @@ export class AllDocumentsComponent implements OnInit {
 
   clearAlert() {
     this.deleted = false;
+  }
+
+  onSubmit(modal: any) {
+    this.isSubmitted = true;
+
+    if (this.newTitle.invalid) {
+      console.log('empty title');
+      return;
+    }
+
+    this.renameDocument();
+    modal.close();
+  }
+
+  private renameDocument() {
+    this.documentService.renameDocument(this.document.id, this.newTitle.value).subscribe(
+      (response: any) => {
+        console.log(response)
+        console.log(this.page)
+          this.getAllDocuments(this.page-1)
+        }, error => {
+        console.log(error)
+      })
   }
 }

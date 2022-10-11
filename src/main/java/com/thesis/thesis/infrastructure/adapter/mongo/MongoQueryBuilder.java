@@ -9,7 +9,7 @@ public class MongoQueryBuilder {
     public Query buildQuery(String title) {
         Criteria criteria = Criteria.where("title").regex(".*" + title + ".*");
         Query query = new Query(criteria);
-        query.fields().include("id", "title");
+        query.fields().include("id", "title", "sourceCode", "creationDate", "generatedDocumentId");
         return query;
     }
 }

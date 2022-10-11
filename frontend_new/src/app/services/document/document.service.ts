@@ -19,9 +19,9 @@ export class DocumentService {
       {headers: headers});
   }
 
-  deleteDocument(id: string): Observable<HttpResponse<MessageResponse>> {
+  deleteDocument(pdfDocument: PDFDocument): Observable<HttpResponse<MessageResponse>> {
     const headers = new HttpHeaders();
-    return this.http.post<HttpResponse<MessageResponse>>(baseUrl + '/deleteDocument', id, {headers: headers });
+    return this.http.post<HttpResponse<MessageResponse>>(baseUrl + '/deleteDocument', pdfDocument, {headers: headers });
   }
 
 
@@ -30,5 +30,9 @@ export class DocumentService {
     return this.http.post<HttpResponse<MessageResponse>>(baseUrl + '/add/' + title, {headers: headers });
   }
 
+  renameDocument(id: string, newTitle: string) {
+    const headers = new HttpHeaders();
+    return this.http.post<HttpResponse<MessageResponse>>(baseUrl + '/rename/' + newTitle, id, {headers: headers });
+  }
 
 }
