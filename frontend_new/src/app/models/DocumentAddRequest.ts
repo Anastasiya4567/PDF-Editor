@@ -1,4 +1,3 @@
-
 export class DocumentAddRequest {
   title: string;
 

@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DocumentAddRequest} from "../../models/DocumentAddRequest";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {AllDocumentsComponent} from "../all-documents/all-documents.component";
+import {AllDocumentsComponent} from "../all-documents-list/all-documents-list.component";
+import {DocumentService} from "../../services/document/document.service";
 
 @Component({
   selector: 'app-main-page',
@@ -16,11 +17,14 @@ export class MainPageComponent implements OnInit {
   documentData: FormGroup;
   document: DocumentAddRequest = {title: ''};
 
+  isSubmitted = false;
+
   constructor(private http: HttpClient,
               private formBuilder: FormBuilder,
               private httpClient: HttpClient,
               private modalService: NgbModal,
-              private allDocumentsComponent: AllDocumentsComponent) {
+              private allDocumentsComponent: AllDocumentsComponent,
+              private documentService: DocumentService) {
     this.documentData = this.formBuilder.group({
       title: ['', Validators.required]
     })
@@ -33,27 +37,33 @@ export class MainPageComponent implements OnInit {
     this.modalService.open(content);
   }
 
-  onSubmit() {
-    console.log(this.documentData.value.title)
-    // check if empty
-    this.document.title = this.documentData.value.title;
+  onSubmit(modal: any) {
+    this.isSubmitted = true;
 
-    this.sendNewDocumentRequest();
+    if (this.documentData.invalid) {
+      console.log('empty title');
+      return;
+    }
+
+    this.createNewDocument();
+    modal.close();
   }
 
-  sendNewDocumentRequest() {
-    const headers = new HttpHeaders();
-
-    this.httpClient.post(this.host + '/add?title=' + this.document.title, {
-      headers: headers
-    }).subscribe(
+  createNewDocument() {
+    this.documentService.createNewDocument(this.documentData.value.title).subscribe(
       (response: any) => {
+        console.log(response)
         if (response.status == 200) {
-          console.log('added ' + this.document.title)
-          this.allDocumentsComponent.getAllDocuments(0)
+            console.log(response.message)
+            this.allDocumentsComponent.getAllDocuments(0)
         } else {
           console.log('Error saving new document')
         }
       })
   }
+
+  closeModal(modal: any) {
+    modal.close();
+  }
+
 }

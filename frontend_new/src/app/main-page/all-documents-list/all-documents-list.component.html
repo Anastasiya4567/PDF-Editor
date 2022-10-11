@@ -1,0 +1,72 @@
+<div *ngIf="deleted" class="alert alert-success" role="alert">
+  {{alertMessage}}
+  <button type="button" class="btn close" data-dismiss="alert" aria-label="Close" (click)="clearAlert()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<!--<div *ngIf="!deleted" class="toast" role="alert" aria-live="assertive" aria-atomic="true">-->
+<!--  <div class="toast-header">-->
+<!--    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">-->
+<!--      <span aria-hidden="true">&times;</span>-->
+<!--    </button>-->
+<!--  </div>-->
+<!--  <div class="toast-body">-->
+<!--    {{alertMessage}}-->
+<!--  </div>-->
+<!--</div>-->
+
+<div class="text-center container-sm">
+  <h5>Filter documents by title</h5>
+  <input class="form-control"
+         type="text"
+         [formControl]="titleFilter"
+         placeholder="Enter title or its part"/>
+  <button type="button" class="btn btn-primary" (click)="getAllDocuments(0)">Filter</button>
+  <button type="button" class="btn btn-secondary" (click)="resetFilter()">Reset filter</button>
+</div>
+
+<div *ngIf="documents.length > 0; then showDocuments else noDocuments"></div>
+<ng-template #showDocuments>
+  <div class="documents-card text-center">
+    <div *ngFor="let document of documents | paginate: { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }">
+      <div class="card" style="margin: 30px">
+        <div class="container">
+          <div class="card-header">
+            <div style="position: relative">
+              <h5>{{document.title}}</h5>
+            </div>
+            <div class="col-md" style="height: 200px">
+              <div class="card-body">
+                <h5 style="height: 140px">
+                  It is a long established fact that a reader will be distracted by the readable content of a page ...
+                </h5>
+                  <button class="btn btn-secondary" (click)="editDocument(document)">Edit</button>
+                  <button class="btn btn btn-dark" (click)="openModal(content, document.id)">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <pagination-controls class="text-center" (pageChange)="pageChange($event)"></pagination-controls>
+</ng-template>
+<ng-template #noDocuments><h5 class="text-center">No documents</h5></ng-template>
+
+<ng-template #content let-modal>
+  <div class="modal-header"></div>
+  <div class="modal-body">
+    <div class="form-group">
+      Confirm deletion
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="deleteDocument(modal)">
+      Yes
+    </button>
+    <button class="btn btn-primary" (click)="closeModal(modal)">
+      No
+    </button>
+  </div>
+</ng-template>

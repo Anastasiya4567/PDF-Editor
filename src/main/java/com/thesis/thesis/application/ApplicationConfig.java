@@ -1,7 +1,7 @@
 package com.thesis.thesis.application;
 
 import com.thesis.thesis.application.domain.DocumentPort;
-import com.thesis.thesis.infrastructure.port.DocumentPersistencePort;
+import com.thesis.thesis.application.domain.DocumentRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,7 +9,12 @@ import org.springframework.context.annotation.Configuration;
 public class ApplicationConfig {
 
     @Bean
-    public DocumentFacade documentFacade(DocumentPort documentPort, DocumentPersistencePort documentPersistencePort) {
-        return new DocumentFacade(documentPort, documentPersistencePort);
+    public DocumentFacade documentFacade(DocumentPort documentPort, DocumentRepository documentRepository) {
+        return new DocumentFacade(documentPort, documentRepository);
+    }
+
+    @Bean
+    public DocumentEditionFacade documentEditionFacade(DocumentRepository documentRepository) {
+        return new DocumentEditionFacade(documentRepository);
     }
 }

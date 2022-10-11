@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AllDocumentsComponent } from './all-documents.component';
+import { AllDocumentsComponent } from './all-documents-list.component';
 
 describe('AllDocumentsComponent', () => {
   let component: AllDocumentsComponent;
