@@ -15,4 +15,5 @@ public interface DocumentPersistencePort {
     List<PDFDocument> findAll();
 
     void deleteById(String id);
+
 }

@@ -39,5 +39,10 @@ public class DocumentRepository {
     public void deleteById(String id) {
         documentPersistencePort.deleteById(id);
     }
+
+    public PDFDocument findById(String id) {
+        return Option.ofOptional(documentPersistencePort.findById(id)).getOrElseThrow(
+                () -> new RuntimeException("No document with id: " + id + " found"));
+    }
 }
 
