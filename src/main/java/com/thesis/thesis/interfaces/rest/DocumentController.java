@@ -3,6 +3,7 @@ package com.thesis.thesis.interfaces.rest;
 import com.thesis.thesis.application.DocumentFacade;
 import com.thesis.thesis.application.GeneratedDocumentDTO;
 import com.thesis.thesis.application.PDFDocumentDTO;
+import com.thesis.thesis.infrastructure.adapter.mongo.PDFDocument;
 import com.thesis.thesis.misc.MessageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,22 @@ public class DocumentController {
     public ResponseEntity<?> addNewDocument(@PathVariable("title") String title) {
         try {
             if (documentFacade.isUnique(title)) {
+                documentFacade.addNewDocument(title);
+                return ResponseEntity.ok(new MessageResponse("The document with title " + title + " has added"));
+            }
+            return ResponseEntity.ok(new MessageResponse("The document title is not unique!"));
+        } catch (Exception exception) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: " + exception.getMessage()));
+        }
+    }
+
+    @RequestMapping(value = "/rename/{title}", method = RequestMethod.POST)
+    public ResponseEntity<?> renameDocument(@PathVariable("title") String title, @RequestBody String id) {
+        try {
+            if (documentFacade.isUnique(title)) {
+                documentFacade.renameDocument(title, id);
                 return ResponseEntity.ok(new MessageResponse("The document with title " + title + " has added"));
             }
             return ResponseEntity.ok(new MessageResponse("The document title is not unique!"));
@@ -43,9 +60,9 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/deleteDocument", method = RequestMethod.POST)
-    public ResponseEntity<?> deleteDocumentById(@RequestBody String id) {
+    public ResponseEntity<?> deleteDocument(@RequestBody PDFDocument pdfDocument) {
         try {
-            documentFacade.deleteDocumentById(id);
+            documentFacade.deleteDocument(pdfDocument);
             return ResponseEntity.ok(new MessageResponse("The document deleted"));
         } catch (Exception exception) {
             return ResponseEntity

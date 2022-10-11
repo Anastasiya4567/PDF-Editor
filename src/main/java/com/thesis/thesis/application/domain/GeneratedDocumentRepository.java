@@ -24,4 +24,8 @@ public class GeneratedDocumentRepository {
     public void save(GeneratedPDF loaded) {
         generatedDocumentPersistencePort.save(loaded);
     }
+
+    public void deleteById(String generatedDocumentId) {
+        generatedDocumentPersistencePort.deleteById(generatedDocumentId);
+    }
 }

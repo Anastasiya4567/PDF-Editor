@@ -1,6 +1,9 @@
 package com.thesis.thesis.application;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.OffsetDateTime;
 
 public class PDFDocumentDTO {
 
@@ -12,6 +15,10 @@ public class PDFDocumentDTO {
 
     @JsonProperty("sourceCode")
     public String sourceCode;
+
+    @JsonProperty("creationDate")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    public OffsetDateTime creationDate;
 
     @JsonProperty("generatedDocumentId")
     public String generatedDocumentId;

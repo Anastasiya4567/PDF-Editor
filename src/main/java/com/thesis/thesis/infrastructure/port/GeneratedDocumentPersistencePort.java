@@ -9,4 +9,6 @@ public interface GeneratedDocumentPersistencePort {
     Optional<GeneratedPDF> findById(String id);
 
     GeneratedPDF save(GeneratedPDF generatedPDF);
+
+    void deleteById(String generatedDocumentId);
 }
