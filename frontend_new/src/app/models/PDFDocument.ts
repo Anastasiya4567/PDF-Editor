@@ -2,7 +2,7 @@ export class PDFDocument {
   id: string;
   title: string;
   sourceCode: string;
-  creationDate: string;
+  creationDate: Date | string;
   generatedDocumentId: string;
 
   constructor(obj: PDFDocument) {

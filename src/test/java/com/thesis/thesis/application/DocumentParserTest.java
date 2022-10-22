@@ -1,4 +1,4 @@
 package com.thesis.thesis.application;
 
-public class DocumentParserFacadeTest {
+public class DocumentParserTest {
 }

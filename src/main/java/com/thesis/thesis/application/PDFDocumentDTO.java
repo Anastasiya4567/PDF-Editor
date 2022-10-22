@@ -26,4 +26,22 @@ public class PDFDocumentDTO {
     public PDFDocumentDTO() {
     }
 
+    public PDFDocumentDTO(String id, String title, String sourceCode, OffsetDateTime creationDate, String generatedDocumentId) {
+        this.id = id;
+        this.title = title;
+        this.sourceCode = sourceCode;
+        this.creationDate = creationDate;
+        this.generatedDocumentId = generatedDocumentId;
+    }
+
+    @Override
+    public String toString() {
+        return "PDFDocumentDTO{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", sourceCode='" + sourceCode + '\'' +
+                ", creationDate=" + creationDate +
+                ", generatedDocumentId='" + generatedDocumentId + '\'' +
+                '}';
+    }
 }

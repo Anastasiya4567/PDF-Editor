@@ -1,4 +1,4 @@
-package com.thesis.thesis.application;
+package com.thesis.thesis.application.domain;
 
 import com.thesis.thesis.application.domain.KeyWords;
 import com.thesis.thesis.application.domain.Token;
@@ -13,11 +13,11 @@ import static io.vavr.API.*;
 
 //import static io.vavr.API.*;
 
-public class DocumentParserFacade {
+public class DocumentParser {
 
     private final List<Token> tokens;
 
-    public DocumentParserFacade(List<Token> tokens) {
+    public DocumentParser(List<Token> tokens) {
         this.tokens = tokens;
     }
 

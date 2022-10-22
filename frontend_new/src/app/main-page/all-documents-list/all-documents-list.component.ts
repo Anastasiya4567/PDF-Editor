@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormControl} from "@angular/forms";
 import {DocumentService} from "../../services/document/document.service";
+import {dateFormat} from "../../shared/shared.config";
 
 @Component({
   selector: 'app-all-documents-list',
@@ -26,6 +27,7 @@ export class AllDocumentsComponent implements OnInit {
   alertMessage: string;
   newTitle = new FormControl('');
   isSubmitted = false;
+  dateFormat = dateFormat.long;
 
   constructor(
     private http: HttpClient,

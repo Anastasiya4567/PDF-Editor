@@ -1,4 +1,4 @@
 package com.thesis.thesis.application;
 
-public class DocumentScannerFacadeTest {
+public class DocumentScannerTest {
 }
