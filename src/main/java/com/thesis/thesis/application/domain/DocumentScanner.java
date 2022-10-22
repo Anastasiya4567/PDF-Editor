@@ -1,4 +1,4 @@
-package com.thesis.thesis.application;
+package com.thesis.thesis.application.domain;
 
 import com.thesis.thesis.application.domain.KeyWords;
 import com.thesis.thesis.application.domain.Token;
@@ -6,7 +6,7 @@ import com.thesis.thesis.application.domain.Token;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DocumentScannerFacade {
+public class DocumentScanner {
 
     private int currentIndex = 0;
 
@@ -16,7 +16,7 @@ public class DocumentScannerFacade {
 
     private List<Token> tokens = new ArrayList<>();
 
-    public DocumentScannerFacade(String sourceText) {
+    public DocumentScanner(String sourceText) {
         this.sourceText = sourceText;
     }
 

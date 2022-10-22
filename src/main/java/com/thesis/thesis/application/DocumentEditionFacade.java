@@ -1,9 +1,7 @@
 package com.thesis.thesis.application;
 
+import com.thesis.thesis.application.domain.*;
 import com.thesis.thesis.misc.Converter;
-import com.thesis.thesis.application.domain.DocumentRepository;
-import com.thesis.thesis.application.domain.GeneratedDocumentRepository;
-import com.thesis.thesis.application.domain.Token;
 import com.thesis.thesis.infrastructure.adapter.mongo.PDFDocument;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
@@ -28,10 +26,10 @@ public class DocumentEditionFacade {
     @MongoTransactional
     public void generatePDFFromSourceText(PDFDocument pdfDocument) throws IOException {
         PDFDocument pdfDocumentToEdit = saveSourceCode(pdfDocument.id, pdfDocument.sourceCode);
-        DocumentScannerFacade documentScannerFacade = new DocumentScannerFacade(pdfDocument.sourceCode);
-        List<Token> tokens = documentScannerFacade.scan();
-        DocumentParserFacade documentParserFacade = new DocumentParserFacade(tokens);
-        PDDocument document = documentParserFacade.parse();
+        DocumentScanner documentScanner = new DocumentScanner(pdfDocument.sourceCode);
+        List<Token> tokens = documentScanner.scan();
+        DocumentParser documentParser = new DocumentParser(tokens);
+        PDDocument document = documentParser.parse();
         PDFRenderer pdfRenderer = new PDFRenderer(document);
         List<String> stringPages = new ArrayList();
         for (int page = 0; page < document.getNumberOfPages(); ++page) {

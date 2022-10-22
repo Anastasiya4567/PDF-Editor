@@ -8,6 +8,7 @@ import com.thesis.thesis.application.mapper.GeneratedDocumentMapper;
 import com.thesis.thesis.infrastructure.adapter.mongo.GeneratedPDF;
 import com.thesis.thesis.infrastructure.adapter.mongo.PDFDocument;
 import com.thesis.thesis.misc.Converter;
+import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -24,7 +25,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static org.apache.logging.log4j.LogManager.getLogger;
+
 public class DocumentFacade {
+
+    private final Logger log = getLogger(this.getClass());
 
     private final DocumentPort documentPort;
 
@@ -42,8 +47,8 @@ public class DocumentFacade {
         this.generatedDocumentRepository = generatedDocumentRepository;
     }
 
-    public Page<PDFDocumentDTO> getAllDocuments(int pageIndex, int pageSize, String title) {
-        return documentPort.getAllDocuments(pageIndex, pageSize, title);
+    public Page<PDFDocumentDTO> getFilteredDocuments(int pageIndex, int pageSize, String title) {
+        return documentPort.getFilteredDocuments(pageIndex, pageSize, title);
     }
 
     @Transactional

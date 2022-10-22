@@ -20,7 +20,7 @@ public class MongoAdapter implements DocumentPort {
     }
 
     @Override
-    public Page<PDFDocumentDTO> getAllDocuments(int pageIndex, int pageSize, String title) {
+    public Page<PDFDocumentDTO> getFilteredDocuments(int pageIndex, int pageSize, String title) {
         MongoQueryBuilder mongoQueryBuilder = new MongoQueryBuilder();
         Pageable pageable = PageRequest.of(pageIndex, pageSize);
 
