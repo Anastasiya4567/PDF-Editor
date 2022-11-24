@@ -16,7 +16,6 @@ import {dateFormat} from "../../shared/shared.config";
 export class AllDocumentsComponent implements OnInit {
 
   documents: PDFDocument[] = [];
-  host = 'http://localhost:8080';
   currentPage: Page;
   page: number = 0;
   itemsPerPage: number = 5;
@@ -50,10 +49,6 @@ export class AllDocumentsComponent implements OnInit {
   }
 
   getAllDocuments(pageNumber: number): void {
-    // const token = this.cookieService.get('token');
-    //
-    // const nextHeader = headersObject.append('Content-Type', 'application/json');
-    // const actualHeader = nextHeader.append('Authorization', 'Bearer ' + token);
     this.documentService.getAllDocuments(pageNumber, this.itemsPerPage, this.titleFilter.value).subscribe(
       (response: any) => {
         this.currentPage = response as Page;

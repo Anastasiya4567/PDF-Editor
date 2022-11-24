@@ -1,6 +1,8 @@
 package kernel.security.controller;
 
+import com.thesis.thesis.misc.MessageResponse;
 import kernel.security.exception.BadRequestException;
+import kernel.security.exception.OAuth2AuthenticationProcessingException;
 import kernel.security.model.AuthProvider;
 import kernel.security.model.User;
 import kernel.security.model.UserBuilder;
@@ -17,15 +19,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -44,23 +44,30 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(),
-                loginRequest.getPassword()
-        );
 
-        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        try {
+            var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                    loginRequest.getEmail(),
+                    loginRequest.getPassword()
+            );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
-        String token = tokenProvider.createToken(authentication);
-        return ResponseEntity.ok(new AuthResponse(token));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String token = tokenProvider.createToken(authentication);
+            return ResponseEntity.ok(new AuthResponse(token));
+        } catch (OAuth2AuthenticationProcessingException exception) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Bad credentials!"));
+        }
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new BadRequestException("Email address already in use.");
+            throw new BadRequestException("Email address already in use!");
         }
 
         User user = new UserBuilder()
@@ -77,6 +84,6 @@ public class AuthController {
                 .buildAndExpand(result.getId()).toUri();
 
         return ResponseEntity.created(location)
-                .body(new ApiResponse(true, "User registered successfully@"));
+                .body(new ApiResponse(true, "User registered successfully"));
     }
 }

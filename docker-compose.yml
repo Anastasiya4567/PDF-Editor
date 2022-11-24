@@ -30,10 +30,12 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=users
     logging:
       options:
         max-size: 10m
         max-file: "3"
     ports:
       - "5432:5432"
-#    volumes
+    volumes:
+      - ./database/sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql

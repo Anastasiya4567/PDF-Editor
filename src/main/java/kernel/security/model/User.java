@@ -15,16 +15,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Email
-    @Column(nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
     private String imageUrl;
 
-    @Column(nullable = false)
+    @Column(name = "email_verified", nullable = false)
     private final Boolean emailVerified = false;
 
     @JsonIgnore

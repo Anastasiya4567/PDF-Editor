@@ -19,7 +19,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
 #    not full
-    url: "jdbc:postgresql://postgres:5432/pdf"
+    url: "jdbc:postgresql://localhost:5432/users"
     username: postgres
     password: postgres
 
@@ -31,14 +31,14 @@ spring:
           google:
             clientId: 780110692711-ssf04377tlbsqo12728g4fiumndsplpg.apps.googleusercontent.com
             clientSecret: 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
-#            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - email
               - profile
           github:
             clientId: 919141426be7a5662f5f
             clientSecret: 230f0dd8b1eef4b89333afd5e2f4ddcd91263375
-#            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - user:email
               - read:user

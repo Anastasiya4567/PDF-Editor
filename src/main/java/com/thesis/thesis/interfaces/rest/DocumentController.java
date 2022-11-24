@@ -5,26 +5,32 @@ import com.thesis.thesis.application.GeneratedDocumentDTO;
 import com.thesis.thesis.application.PDFDocumentDTO;
 import com.thesis.thesis.infrastructure.adapter.mongo.PDFDocument;
 import com.thesis.thesis.misc.MessageResponse;
+import kernel.security.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
 public class DocumentController {
 
+    private final UserRepository userRepository;
+
     private final DocumentFacade documentFacade;
 
-    public DocumentController(DocumentFacade documentFacade) {
+    public DocumentController(UserRepository userRepository, DocumentFacade documentFacade) {
+        this.userRepository = userRepository;
         this.documentFacade = documentFacade;
     }
 
-    @RequestMapping(value = "/documents/{pageIndex}/{pageSize}", method = RequestMethod.GET)
+    @GetMapping(value = "/documents/{pageIndex}/{pageSize}")
     public Page<PDFDocumentDTO> getFilteredDocuments(@PathVariable("pageIndex") int pageIndex, @PathVariable("pageSize") int pageSize, @RequestParam(name = "title") String title) {
         return documentFacade.getFilteredDocuments(pageIndex, pageSize, title);
     }
 
-    @RequestMapping(value = "/add/{title}", method = RequestMethod.POST)
+    @PostMapping(value = "/add/{title}")
     public ResponseEntity<?> addNewDocument(@PathVariable("title") String title) {
         try {
             if (documentFacade.isUnique(title)) {
@@ -39,7 +45,7 @@ public class DocumentController {
         }
     }
 
-    @RequestMapping(value = "/rename/{title}", method = RequestMethod.POST)
+    @PostMapping(value = "/rename/{title}")
     public ResponseEntity<?> renameDocument(@PathVariable("title") String title, @RequestBody String id) {
         try {
             if (documentFacade.isUnique(title)) {
@@ -54,12 +60,12 @@ public class DocumentController {
         }
     }
 
-    @RequestMapping(value = "/getDocumentByTitle", method = RequestMethod.GET)
+    @GetMapping(value = "/getDocumentByTitle")
     public PDFDocumentDTO getDocumentByTitle(@RequestParam(name = "title") String title) {
         return documentFacade.getDocumentByTitle(title);
     }
 
-    @RequestMapping(value = "/deleteDocument", method = RequestMethod.POST)
+    @PostMapping(value = "/deleteDocument")
     public ResponseEntity<?> deleteDocument(@RequestBody PDFDocument pdfDocument) {
         try {
             documentFacade.deleteDocument(pdfDocument);
@@ -71,7 +77,7 @@ public class DocumentController {
         }
     }
 
-    @RequestMapping(value = "/getGeneratedDocument", method = RequestMethod.GET)
+    @GetMapping(value = "/getGeneratedDocument")
     public GeneratedDocumentDTO getGeneratedDocument(@RequestParam(name = "id") String id) {
         return documentFacade.getGeneratedDocumentById(id);
     }

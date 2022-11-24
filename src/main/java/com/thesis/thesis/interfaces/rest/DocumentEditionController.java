@@ -15,7 +15,7 @@ public class DocumentEditionController {
         this.documentEditionFacade = documentEditionFacade;
     }
 
-    @RequestMapping(value = "/generateFromSourceText", method = RequestMethod.POST)
+    @PostMapping(value = "/generateFromSourceText")
     public ResponseEntity<?> generatePDFFromSourceText(@RequestBody PDFDocument pdfDocument) {
         try {
             documentEditionFacade.generatePDFFromSourceText(pdfDocument);

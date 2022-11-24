@@ -8,6 +8,9 @@ import {PDFDocument} from "../models/PDFDocument";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {GeneratedDocument} from "../models/GeneratedDocument";
 
+import {ACCESS_TOKEN, API_BASE_URL} from '../constants/app-constants.component';
+import {CookieService} from "ngx-cookie-service";
+
 @Component({
   selector: 'app-document-edition-window',
   templateUrl: './document-edition-window.component.html',
@@ -16,7 +19,6 @@ import {GeneratedDocument} from "../models/GeneratedDocument";
 export class DocumentEditionWindowComponent implements OnInit {
 
   title: string | null = this.activatedRoute.snapshot.paramMap.get('title')
-  host = 'http://localhost:8080';
   document: PDFDocument;
   generatedDocument: GeneratedDocument;
   sourceCode: FormGroup;
@@ -31,6 +33,7 @@ export class DocumentEditionWindowComponent implements OnInit {
               private modalService: NgbModal,
               private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder,
+              private cookieService: CookieService,
               private sanitizer: DomSanitizer) {
     this.sourceCode = this.formBuilder.group({
       text: ['', Validators.required]
@@ -47,8 +50,9 @@ export class DocumentEditionWindowComponent implements OnInit {
 
   private getDocumentByTitle() {
     const headers = new HttpHeaders();
-    this.httpClient.get(this.host + '/getDocumentByTitle?title=' + this.title, {
-      headers: headers
+    const authHeaders = headers.append('Authorization', 'Bearer ' + this.cookieService.get(ACCESS_TOKEN));
+    this.httpClient.get(API_BASE_URL + '/getDocumentByTitle?title=' + this.title, {
+      headers: authHeaders
     }).subscribe(
       (response: any) => {
         this.document = response;
@@ -82,7 +86,7 @@ export class DocumentEditionWindowComponent implements OnInit {
       sourceCode: this.sourceCode.value.text
     }
 
-    this.httpClient.post(this.host + '/generateFromSourceText', JSON.stringify(body), {
+    this.httpClient.post(API_BASE_URL + '/generateFromSourceText', JSON.stringify(body), {
       headers: newHeaders
     }).subscribe(
       (response: any) => {
@@ -103,10 +107,11 @@ export class DocumentEditionWindowComponent implements OnInit {
 
   private getGeneratedDocument() {
     const headers = new HttpHeaders();
+    const authHeaders = headers.append('Authorization', 'Bearer ' + this.cookieService.get(ACCESS_TOKEN));
     console.log(this.document.generatedDocumentId)
 
-    this.httpClient.get(this.host + '/getGeneratedDocument?id=' + this.document.generatedDocumentId, {
-      headers: headers
+    this.httpClient.get(API_BASE_URL + '/getGeneratedDocument?id=' + this.document.generatedDocumentId, {
+      headers: authHeaders
     }).subscribe(
       (response: any) => {
         console.log(response)
