@@ -50,10 +50,10 @@ public class DocumentFacadeTest {
 
         Page<PDFDocumentDTO> filteredDocumentsPage = new PageImpl<>(pdfDocumentDTOs, PageRequest.of(pageIndex, pageSize), 2);
 
-        given(documentPort.getFilteredDocuments(pageIndex, pageSize, title)).willReturn(filteredDocumentsPage);
+        given(documentPort.getFilteredDocuments("", pageIndex, pageSize, title)).willReturn(filteredDocumentsPage);
 
         // when
-        var resultPage = documentFacade.getFilteredDocuments(pageIndex, pageSize, title);
+        var resultPage = documentFacade.getFilteredDocuments("", pageIndex, pageSize, title);
 
         // then
         assertThat(resultPage.getContent()).isEqualTo(pdfDocumentDTOs);

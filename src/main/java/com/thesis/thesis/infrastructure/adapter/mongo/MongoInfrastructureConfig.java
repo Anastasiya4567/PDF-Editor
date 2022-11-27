@@ -20,7 +20,7 @@ import java.util.List;
 @EnableMongoRepositories
 @EnableElasticsearchRepositories(basePackages = "com.thesis.thesis.infrastructure.adapter.mongo")
 @Configuration
-class MongoInfrastructureConfig {
+public class MongoInfrastructureConfig {
 
     @Bean
     public MongoAdapter mongoAdapter(MongoTemplate mongoTemplate) {

@@ -1,5 +1,7 @@
 <ul class="nav nav-pills justify-content-end" style="background-color: #38ACEC; margin-bottom: 30px">
-  <button class="btn btn-light navbar-options"><a  [routerLink]="'/main-page'">Main page</a></button>
-  <button class="btn btn-light navbar-options"><a [routerLink]="'/my-profile'">My profile</a></button>
-  <button  class="btn btn-light navbar-options"><a>Logout</a></button>
+  <button *ngIf="isAuthenticated" class="btn btn-light navbar-options"><a  [routerLink]="'/main-page'">Main page</a></button>
+  <button *ngIf="isAuthenticated" class="btn btn-light navbar-options"><a [routerLink]="'/my-profile'">My profile</a></button>
+  <div><button class="btn btn-light navbar-options"><a [routerLink]="'/about'">About</a></button></div>
+  <button *ngIf="isAuthenticated" (click)='logout()' class="btn btn-light navbar-options"><a>Logout</a></button>
+
 </ul>

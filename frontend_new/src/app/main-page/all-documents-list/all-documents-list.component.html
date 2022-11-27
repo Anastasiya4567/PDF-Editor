@@ -102,7 +102,13 @@
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal(modal)">Cancel</button>
       <div class="form-group">
-        <button type="button" class="btn btn-primary" (click)="onSubmit(modal)">Submit</button>
+        <button type="button"
+                [ngClass]="newTitle.value == document.title ? 'btn btn-primary disabled' : 'btn btn-primary'"
+                (click)="onSubmit(modal)">
+          Submit
+        </button>
       </div>
     </div>
 </ng-template>
+
+<!--class="btn btn-primary"-->

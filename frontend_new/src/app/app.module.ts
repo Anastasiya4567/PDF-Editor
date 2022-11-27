@@ -15,6 +15,12 @@ import {NewDocumentModalComponent} from './main-page/new-document-modal/new-docu
 import {DocumentEditionWindowComponent} from './document-edition-window/document-edition-window.component';
 import {NgxKeyboardShortcutModule} from "ngx-keyboard-shortcuts";
 import {RouterModule} from "@angular/router";
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { LoginFormComponent } from './login/login-form/login-form.component';
+import { SocialLoginComponent } from './login/social-login/social-login.component';
+import { RegisterFormComponent } from './register/register-form/register-form.component';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +30,13 @@ import {RouterModule} from "@angular/router";
     MyProfileComponent,
     AllDocumentsComponent,
     NewDocumentModalComponent,
-    DocumentEditionWindowComponent
+    DocumentEditionWindowComponent,
+    LoginComponent,
+    RegisterComponent,
+    LoginFormComponent,
+    SocialLoginComponent,
+    RegisterFormComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

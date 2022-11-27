@@ -13,7 +13,6 @@ import {DocumentService} from "../../services/document/document.service";
 })
 export class MainPageComponent implements OnInit {
 
-  host = 'http://localhost:8080';
   documentData: FormGroup;
   document: DocumentAddRequest = {title: ''};
 
