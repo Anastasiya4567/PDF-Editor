@@ -21,7 +21,7 @@ export class DocumentService {
   }
 
   getAllDocuments(pageNumber: number, itemsPerPage: number, titleFilter: string): Observable<Array<PDFDocument>> {
-    return this.http.get<Array<PDFDocument>>(API_BASE_URL + '/documents/' + pageNumber + '/' + itemsPerPage + '?title=' + titleFilter,
+    return this.http.get<Array<PDFDocument>>(API_BASE_URL + '/user-documents/' + pageNumber + '/' + itemsPerPage + '?title=' + titleFilter,
       {headers: this.setHeaders() });
   }
 

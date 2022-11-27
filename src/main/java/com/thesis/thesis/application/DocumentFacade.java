@@ -11,7 +11,6 @@ import com.thesis.thesis.misc.Converter;
 import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.mapstruct.factory.Mappers;
@@ -22,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -47,15 +47,15 @@ public class DocumentFacade {
         this.generatedDocumentRepository = generatedDocumentRepository;
     }
 
-    public Page<PDFDocumentDTO> getFilteredDocuments(int pageIndex, int pageSize, String title) {
-        return documentPort.getFilteredDocuments(pageIndex, pageSize, title);
+    public Page<PDFDocumentDTO> getFilteredDocuments(String ownerEmail, int pageIndex, int pageSize, String title) {
+        return documentPort.getFilteredDocuments(ownerEmail, pageIndex, pageSize, title);
     }
 
     @Transactional
-    public void addNewDocument(String title) throws IOException {
+    public void addNewDocument(String ownerEmail, String title) throws IOException {
         String generatedDocumentId = UUID.randomUUID().toString();
         OffsetDateTime creationDate = OffsetDateTime.now();
-        PDFDocument pdfDocument = new PDFDocument(UUID.randomUUID().toString(), title, "", creationDate, generatedDocumentId);
+        PDFDocument pdfDocument = new PDFDocument(UUID.randomUUID().toString(), ownerEmail, title, "", creationDate, generatedDocumentId);
         documentRepository.save(pdfDocument);
         GeneratedPDF generatedPDF = generateBlankPDF(generatedDocumentId);
         generatedDocumentRepository.save(generatedPDF);
@@ -87,9 +87,10 @@ public class DocumentFacade {
         return documentMapper.mapFromDocument(documentRepository.findByTitle(title));
     }
 
-    public boolean isUnique(String title) throws IOException {
+    public boolean isUnique(String title, String ownerEmail) {
         List<PDFDocument> documents = documentRepository.findAllDocuments();
         return !(documents.stream()
+                .filter(document -> Objects.equals(document.ownerEmail, ownerEmail))
                 .map(document -> document.title)
                 .collect(Collectors.toList())
                 .contains(title));
