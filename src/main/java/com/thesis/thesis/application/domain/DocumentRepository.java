@@ -27,11 +27,6 @@ public class DocumentRepository {
         documentPersistencePort.save(pdfDocument);
     }
 
-    public PDFDocument findByTitle(String title) {
-        return Option.ofOptional(documentPersistencePort.findByTitle(title)).getOrElseThrow(
-                () -> new RuntimeException("No document with title: " + title + " found"));
-    }
-
     public List<PDFDocument> findAllDocuments() {
         return documentPersistencePort.findAll();
     }

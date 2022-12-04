@@ -52,10 +52,10 @@ public class DocumentFacade {
     }
 
     @Transactional
-    public void addNewDocument(String ownerEmail, String title) throws IOException {
+    public void addNewDocument(String ownerEmail, String title, Boolean privateAccess) throws IOException {
         String generatedDocumentId = UUID.randomUUID().toString();
         OffsetDateTime creationDate = OffsetDateTime.now();
-        PDFDocument pdfDocument = new PDFDocument(UUID.randomUUID().toString(), ownerEmail, title, "", creationDate, generatedDocumentId);
+        PDFDocument pdfDocument = new PDFDocument(UUID.randomUUID().toString(), ownerEmail, privateAccess, title, "", creationDate, generatedDocumentId);
         documentRepository.save(pdfDocument);
         GeneratedPDF generatedPDF = generateBlankPDF(generatedDocumentId);
         generatedDocumentRepository.save(generatedPDF);
@@ -64,33 +64,43 @@ public class DocumentFacade {
     private GeneratedPDF generateBlankPDF(String generatedDocumentId) throws IOException {
         PDDocument document = new PDDocument();
         PDPage blankPage = new PDPage();
+        document.addPage(blankPage);
 
         // ***
 //        PDPageContentStream contentStream = new PDPageContentStream(document, blankPage);
 //        contentStream.beginText();
-//        contentStream.newLineAtOffset(10, 100);
-//        contentStream.showText("Hello");
+//        contentStream.newLineAtOffset(10, 500);
+//        contentStream.setFont(new PDType1Font(HELVETICA_BOLD), 10);
+//        contentStream.showText("Hello Hello Hello Hello Hello");
 //        contentStream.endText();
 //        contentStream.close();
         // ***
-        document.addPage(blankPage);
-        document.close();
 
         PDFRenderer pdfRenderer = new PDFRenderer(document);
+
         BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);
         List<String> stringPages = List.of(Converter.imgToString(bufferedImage));
+        document.close();
         return new GeneratedPDF(generatedDocumentId, stringPages);
     }
 
 
-    public PDFDocumentDTO getDocumentByTitle(String title) {
-        return documentMapper.mapFromDocument(documentRepository.findByTitle(title));
+    public PDFDocumentDTO getDocumentById(String id) {
+        return documentMapper.mapFromDocument(documentRepository.findById(id));
     }
 
-    public boolean isUnique(String title, String ownerEmail) {
+    public boolean isUniqueAmongOwners(String title, String ownerEmail) {
         List<PDFDocument> documents = documentRepository.findAllDocuments();
         return !(documents.stream()
                 .filter(document -> Objects.equals(document.ownerEmail, ownerEmail))
+                .map(document -> document.title)
+                .collect(Collectors.toList())
+                .contains(title));
+    }
+
+    public boolean isUniqueAmongAll(String title) {
+        List<PDFDocument> documents = documentRepository.findAllDocuments();
+        return !(documents.stream()
                 .map(document -> document.title)
                 .collect(Collectors.toList())
                 .contains(title));
