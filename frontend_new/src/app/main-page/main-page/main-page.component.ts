@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {DocumentAddRequest} from "../../models/DocumentAddRequest";
+import {NewDocumentCreateRequest} from "../../models/NewDocumentCreateRequest";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AllDocumentsComponent} from "../all-documents-list/all-documents-list.component";
 import {DocumentService} from "../../services/document/document.service";
@@ -14,7 +14,7 @@ import {DocumentService} from "../../services/document/document.service";
 export class MainPageComponent implements OnInit {
 
   documentData: FormGroup;
-  document: DocumentAddRequest = {title: ''};
+  createdDocument = new NewDocumentCreateRequest();
 
   isSubmitted = false;
 
@@ -25,7 +25,8 @@ export class MainPageComponent implements OnInit {
               private allDocumentsComponent: AllDocumentsComponent,
               private documentService: DocumentService) {
     this.documentData = this.formBuilder.group({
-      title: ['', Validators.required]
+      title: ['', Validators.required],
+      privateAccess: true
     })
   }
 
@@ -49,7 +50,14 @@ export class MainPageComponent implements OnInit {
   }
 
   createNewDocument() {
-    this.documentService.createNewDocument(this.documentData.value.title).subscribe(
+
+    console.log(this.documentData.value.title)
+    console.log(this.documentData.value.privateAccess)
+
+    this.createdDocument.title = this.documentData.value.title;
+    this.createdDocument.privateAccess = this.documentData.value.privateAccess;
+
+    this.documentService.createNewDocument(this.createdDocument).subscribe(
       (response: any) => {
         console.log(response)
         if (response.status == 200) {

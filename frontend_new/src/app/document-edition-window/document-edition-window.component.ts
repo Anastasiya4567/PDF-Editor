@@ -2,14 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {IKeyboardShortcutListenerOptions, KeyboardKeys} from 'ngx-keyboard-shortcuts';
 import {PDFDocument} from "../models/PDFDocument";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {GeneratedDocument} from "../models/GeneratedDocument";
-
-import {ACCESS_TOKEN, API_BASE_URL} from '../constants/app-constants.component';
 import {CookieService} from "ngx-cookie-service";
+import {GeneratedDocumentService} from "../services/generated-document/generated-document.service";
+import {DocumentService} from "../services/document/document.service";
 
 @Component({
   selector: 'app-document-edition-window',
@@ -18,7 +18,7 @@ import {CookieService} from "ngx-cookie-service";
 })
 export class DocumentEditionWindowComponent implements OnInit {
 
-  title: string | null = this.activatedRoute.snapshot.paramMap.get('title')
+  id: string | null = this.activatedRoute.snapshot.paramMap.get('id')
   document: PDFDocument;
   generatedDocument: GeneratedDocument;
   sourceCode: FormGroup;
@@ -34,36 +34,34 @@ export class DocumentEditionWindowComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder,
               private cookieService: CookieService,
-              private sanitizer: DomSanitizer) {
+              private sanitizer: DomSanitizer,
+              private documentService: DocumentService,
+              private generatedDocumentService: GeneratedDocumentService) {
     this.sourceCode = this.formBuilder.group({
       text: ['', Validators.required]
     })
   }
 
   ngOnInit(): void {
-    this.getDocumentByTitle();
+    this.getDocumentById();
   }
 
-  convertImage(generatedPage: String) : SafeUrl {
+  convertImage(generatedPage: String): SafeUrl {
     return this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,' + generatedPage);
   }
 
-  private getDocumentByTitle() {
-    const headers = new HttpHeaders();
-    const authHeaders = headers.append('Authorization', 'Bearer ' + this.cookieService.get(ACCESS_TOKEN));
-    this.httpClient.get(API_BASE_URL + '/getDocumentByTitle?title=' + this.title, {
-      headers: authHeaders
-    }).subscribe(
+  private getDocumentById() {
+
+    this.documentService.getDocumentById(this.id).subscribe(
       (response: any) => {
         this.document = response;
         this.getGeneratedDocument();
         console.log(this.document);
       });
-
   }
 
   backToMainPage() {
-    this.router.navigate(['/'], {relativeTo: this.activatedRoute})
+    this.router.navigate(['/main-page'], {relativeTo: this.activatedRoute})
   }
 
   openModal(content: any) {
@@ -74,45 +72,42 @@ export class DocumentEditionWindowComponent implements OnInit {
     modal.close();
   }
 
-  saveSourceCode(modal: any) {
+  saveSourceCode() {
     if (this.sourceCode.invalid)
       return;
 
-    const headers = new HttpHeaders();
-    const newHeaders = headers.append('Content-Type', 'application/json');
     const body = {
       id: this.document.id,
-      title: this.title,
+      title: this.document.title,
       sourceCode: this.sourceCode.value.text
     }
 
-    this.httpClient.post(API_BASE_URL + '/generateFromSourceText', JSON.stringify(body), {
-      headers: newHeaders
-    }).subscribe(
+    this.generatedDocumentService.generateDocument(body).subscribe(
       (response: any) => {
         if (response.status == 200) {
-          console.log('generated ' + this.title)
+          console.log('generated ' + this.document.title)
           this.backToMainPage();
         } else {
           console.log('Error saving generated document')
         }
       })
+  }
 
+  saveSourceCodeAndExit(modal: any) {
+    this.saveSourceCode();
     this.closeModal(modal);
   }
 
   recompile() {
     console.log('recompiled')
+    this.saveSourceCode();
+    this.getDocumentById();
   }
 
   private getGeneratedDocument() {
-    const headers = new HttpHeaders();
-    const authHeaders = headers.append('Authorization', 'Bearer ' + this.cookieService.get(ACCESS_TOKEN));
     console.log(this.document.generatedDocumentId)
 
-    this.httpClient.get(API_BASE_URL + '/getGeneratedDocument?id=' + this.document.generatedDocumentId, {
-      headers: authHeaders
-    }).subscribe(
+    this.generatedDocumentService.getGeneratedDocument(this.document.generatedDocumentId).subscribe(
       (response: any) => {
         console.log(response)
         this.generatedDocument = response;

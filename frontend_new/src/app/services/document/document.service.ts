@@ -6,6 +6,7 @@ import {MessageResponse} from "../../models/MessageResponse";
 
 import { API_BASE_URL, ACCESS_TOKEN } from '../../constants/app-constants.component';
 import {CookieService} from "ngx-cookie-service";
+import {NewDocumentCreateRequest} from "../../models/NewDocumentCreateRequest";
 
 @Injectable({
   providedIn: 'root'
@@ -25,12 +26,18 @@ export class DocumentService {
       {headers: this.setHeaders() });
   }
 
+  getDocumentById(id: string | null): Observable<PDFDocument> {
+    return this.http.get<PDFDocument>(API_BASE_URL + '/getDocumentById?id=' + id, {
+      headers: this.setHeaders()
+    })
+  }
+
   deleteDocument(pdfDocument: PDFDocument): Observable<HttpResponse<MessageResponse>> {
     return this.http.post<HttpResponse<MessageResponse>>(API_BASE_URL + '/deleteDocument', pdfDocument, {headers: this.setHeaders() });
   }
 
-  createNewDocument(title: string) {
-    return this.http.post<HttpResponse<MessageResponse>>(API_BASE_URL + '/add/' + title, {},  {headers: this.setHeaders() });
+  createNewDocument(createdDocument: NewDocumentCreateRequest) {
+    return this.http.post<HttpResponse<MessageResponse>>(API_BASE_URL + '/add', createdDocument,  {headers: this.setHeaders() });
   }
 
   renameDocument(id: string, newTitle: string) {

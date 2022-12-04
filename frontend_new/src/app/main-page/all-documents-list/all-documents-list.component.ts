@@ -63,7 +63,8 @@ export class AllDocumentsComponent implements OnInit {
   }
 
   editDocument(document: PDFDocument) {
-    this.router.navigate(['document/' + document.title], {
+    console.log('id: ' + document.id)
+    this.router.navigate(['document/' + document.id], {
       relativeTo: this.activatedRoute
     })
   }

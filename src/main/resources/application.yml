@@ -51,5 +51,4 @@ app:
   cors:
     allowedOrigins: http://localhost:4200
   oauth2:
-    authorizedRedirectUri:
-      - http://localhost:4200/oauth2/redirect
+    authorizedRedirectUri: http://localhost:4200/oauth2/redirect

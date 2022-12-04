@@ -44,8 +44,8 @@ public class DocumentFacadeTest {
         String title = "story";
 
         List<PDFDocumentDTO> pdfDocumentDTOs = List.of(
-                new PDFDocumentDTO("test id 1", "A story", "", OffsetDateTime.now(), "test generated id 1"),
-                new PDFDocumentDTO("test id 2", "A story of TB", "", OffsetDateTime.now(), "test generated id 2")
+                new PDFDocumentDTO("test id 1", "A story", true, "", OffsetDateTime.now(), "test generated id 1"),
+                new PDFDocumentDTO("test id 2", "A story of TB", true, "", OffsetDateTime.now(), "test generated id 2")
         );
 
         Page<PDFDocumentDTO> filteredDocumentsPage = new PageImpl<>(pdfDocumentDTOs, PageRequest.of(pageIndex, pageSize), 2);

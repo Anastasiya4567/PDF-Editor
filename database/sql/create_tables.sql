@@ -4,9 +4,9 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(120) UNIQUE NOT NULL,
     image_url VARCHAR(255),
     email_verified BOOLEAN DEFAULT FALSE,
-    password VARCHAR(60) NOT NULL,
+    password VARCHAR(60),
     provider VARCHAR(20) NOT NULL,
-    provider_id VARCHAR(20),
+    provider_id VARCHAR(50),
 
     PRIMARY KEY (id)
 );

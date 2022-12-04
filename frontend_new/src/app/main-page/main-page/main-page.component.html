@@ -25,7 +25,33 @@
           Title can't be empty
         </div>
       </div>
+
+      <div>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input type="radio"
+                   formControlName="privateAccess"
+                   class="form-check-input"
+                   name="privateAccess"
+                   value="true"
+                   checked>
+            private
+          </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input type="radio"
+                   formControlName="privateAccess"
+                   class="form-check-input"
+                   name="privateAccess"
+                   value="false">
+            public
+          </label>
+        </div>
+      </div>
     </div>
+
+
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal(modal)">Cancel</button>
       <div class="form-group">

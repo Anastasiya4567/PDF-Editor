@@ -21,6 +21,7 @@ import { LoginFormComponent } from './login/login-form/login-form.component';
 import { SocialLoginComponent } from './login/social-login/social-login.component';
 import { RegisterFormComponent } from './register/register-form/register-form.component';
 import { AboutComponent } from './about/about.component';
+import { OAuth2RedirectHandlerComponent } from './redirect/oauth2-redirect-handler/oauth2-redirect-handler.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { AboutComponent } from './about/about.component';
     LoginFormComponent,
     SocialLoginComponent,
     RegisterFormComponent,
-    AboutComponent
+    AboutComponent,
+    OAuth2RedirectHandlerComponent
   ],
   imports: [
     BrowserModule,

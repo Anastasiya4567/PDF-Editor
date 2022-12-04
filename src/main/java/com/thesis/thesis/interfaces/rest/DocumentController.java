@@ -2,10 +2,10 @@ package com.thesis.thesis.interfaces.rest;
 
 import com.thesis.thesis.application.DocumentFacade;
 import com.thesis.thesis.application.GeneratedDocumentDTO;
+import com.thesis.thesis.application.NewDocumentCreate;
 import com.thesis.thesis.application.PDFDocumentDTO;
 import com.thesis.thesis.infrastructure.adapter.mongo.PDFDocument;
 import com.thesis.thesis.misc.MessageResponse;
-import kernel.security.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,12 +16,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class DocumentController {
 
-    private final UserRepository userRepository;
-
     private final DocumentFacade documentFacade;
 
-    public DocumentController(UserRepository userRepository, DocumentFacade documentFacade) {
-        this.userRepository = userRepository;
+    public DocumentController(DocumentFacade documentFacade) {
         this.documentFacade = documentFacade;
     }
 
@@ -39,17 +36,24 @@ public class DocumentController {
         return userDetails.getUsername();
     }
 
-    @PostMapping(value = "/add/{title}")
-    public ResponseEntity<?> addNewDocument(@PathVariable("title") String title) {
+    @PostMapping(value = "/add")
+    public ResponseEntity<?> addNewDocument(@RequestBody NewDocumentCreate newDocumentCreate) {
 
         String ownerEmail = getCurrentUserEmail();
 
         try {
-            // TODO: check for concrete user
-            if (documentFacade.isUnique(title, ownerEmail)) {
-                documentFacade.addNewDocument(ownerEmail, title);
-                return ResponseEntity.ok(new MessageResponse("The document with title " + title + " has added"));
+            if (newDocumentCreate.getPrivateAccess()) {
+                if (documentFacade.isUniqueAmongOwners(newDocumentCreate.getTitle(), ownerEmail)) {
+                    documentFacade.addNewDocument(ownerEmail, newDocumentCreate.getTitle(), newDocumentCreate.getPrivateAccess());
+                    return ResponseEntity.ok(new MessageResponse("The document with title " + newDocumentCreate.getTitle() + " has added"));
+                }
+            } else {
+                if (documentFacade.isUniqueAmongAll(newDocumentCreate.getTitle())) {
+                    documentFacade.addNewDocument(ownerEmail, newDocumentCreate.getTitle(), newDocumentCreate.getPrivateAccess());
+                    return ResponseEntity.ok(new MessageResponse("The document with title " + newDocumentCreate.getTitle() + " has added"));
+                }
             }
+
             return ResponseEntity.ok(new MessageResponse("The document title is not unique!"));
         } catch (Exception exception) {
             return ResponseEntity
@@ -64,7 +68,7 @@ public class DocumentController {
         String ownerEmail = getCurrentUserEmail();
 
         try {
-            if (documentFacade.isUnique(title, ownerEmail)) {
+            if (documentFacade.isUniqueAmongOwners(title, ownerEmail)) {
                 documentFacade.renameDocument(title, id);
                 return ResponseEntity.ok(new MessageResponse("The document with title " + title + " has added"));
             }
@@ -76,9 +80,9 @@ public class DocumentController {
         }
     }
 
-    @GetMapping(value = "/getDocumentByTitle")
-    public PDFDocumentDTO getDocumentByTitle(@RequestParam(name = "title") String title) {
-        return documentFacade.getDocumentByTitle(title);
+    @GetMapping(value = "/getDocumentById")
+    public PDFDocumentDTO getDocumentById(@RequestParam(name = "id") String id) {
+        return documentFacade.getDocumentById(id);
     }
 
     @PostMapping(value = "/deleteDocument")

@@ -21,6 +21,9 @@ public class PDFDocument implements Serializable {
     @Field("ownerEmail")
     public String ownerEmail;
 
+    @Field("privateAccess")
+    public Boolean privateAccess;
+
     @Field("title")
     public String title;
 
@@ -37,9 +40,10 @@ public class PDFDocument implements Serializable {
     }
 
     @PersistenceConstructor
-    public PDFDocument(String id, String ownerEmail, String title, String sourceCode, OffsetDateTime creationDate, String generatedDocumentId) {
+    public PDFDocument(String id, String ownerEmail, Boolean privateAccess, String title, String sourceCode, OffsetDateTime creationDate, String generatedDocumentId) {
         this.id = id;
         this.ownerEmail = ownerEmail;
+        this.privateAccess = privateAccess;
         this.title = title;
         this.sourceCode = sourceCode;
         this.creationDate = creationDate;

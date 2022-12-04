@@ -14,7 +14,7 @@
 	<name>PDF-editor</name>
 	<description>PDF-editor</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>15</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -102,7 +102,7 @@
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
-			<version>1.5.0.Final</version>
+			<version>1.5.3.Final</version>
 		</dependency>
 
 		<dependency>

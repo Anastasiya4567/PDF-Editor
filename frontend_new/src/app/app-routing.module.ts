@@ -6,21 +6,25 @@ import {DocumentEditionWindowComponent} from "./document-edition-window/document
 import {LoginComponent} from "./login/login.component";
 import {RegisterComponent} from "./register/register.component";
 import {AboutComponent} from "./about/about.component";
+import {AuthGuardService} from "./services/guard/auth-guard.service";
+import {OAuth2RedirectHandlerComponent} from "./redirect/oauth2-redirect-handler/oauth2-redirect-handler.component";
 
 const routes: Routes = [
-  { path: '', redirectTo: 'main-page', pathMatch: 'full'},
+  { path: '', redirectTo: 'login', pathMatch: 'full'},
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'main-page', component: MainPageComponent },
+  { path: 'oauth/redirect', component: OAuth2RedirectHandlerComponent },
+  { path: 'main-page', component: MainPageComponent, canActivate: [AuthGuardService]},
   { path: 'main-page',
     children: [
       {
-        path: 'document/:title',
-        component: DocumentEditionWindowComponent
+        path: 'document/:id',
+        component: DocumentEditionWindowComponent,
+        canActivate: [AuthGuardService]
       }
     ]
   },
-  { path: 'my-profile', component: MyProfileComponent},
+  { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuardService]},
   { path: 'about', component: AboutComponent},
 ];
 

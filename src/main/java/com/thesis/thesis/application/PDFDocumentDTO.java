@@ -13,6 +13,9 @@ public class PDFDocumentDTO {
     @JsonProperty("title")
     public String title;
 
+    @JsonProperty("privateAccess")
+    public Boolean privateAccess;
+
     @JsonProperty("sourceCode")
     public String sourceCode;
 
@@ -26,9 +29,10 @@ public class PDFDocumentDTO {
     public PDFDocumentDTO() {
     }
 
-    public PDFDocumentDTO(String id, String title, String sourceCode, OffsetDateTime creationDate, String generatedDocumentId) {
+    public PDFDocumentDTO(String id, String title, Boolean privateAccess, String sourceCode, OffsetDateTime creationDate, String generatedDocumentId) {
         this.id = id;
         this.title = title;
+        this.privateAccess = privateAccess;
         this.sourceCode = sourceCode;
         this.creationDate = creationDate;
         this.generatedDocumentId = generatedDocumentId;
@@ -39,6 +43,7 @@ public class PDFDocumentDTO {
         return "PDFDocumentDTO{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
+                ", privateAccess=" + privateAccess +
                 ", sourceCode='" + sourceCode + '\'' +
                 ", creationDate=" + creationDate +
                 ", generatedDocumentId='" + generatedDocumentId + '\'' +
