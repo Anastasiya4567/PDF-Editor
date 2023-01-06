@@ -1,6 +1,6 @@
 package com.thesis.thesis.application.domain;
 
-import com.thesis.thesis.infrastructure.adapter.mongo.PDFDocument;
+import com.thesis.thesis.infrastructure.adapter.mongo.document.PDFDocument;
 import com.thesis.thesis.infrastructure.port.DocumentPersistencePort;
 import io.vavr.control.Option;
 

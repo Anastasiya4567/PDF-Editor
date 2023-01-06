@@ -3,6 +3,10 @@
   Back
 </button>
 
+<button class="btn btn-primary justify-content-end" (click)="download()">
+  Download PDF
+</button>
+
 <div class="text-center">
   <h3>{{document.title}}</h3>
 </div>
@@ -13,20 +17,40 @@
   </button>
 </div>
 
-<div class="container">
+<div class="container-fluid">
   <div class="row">
-    <div class="col">
-      <form [formGroup]="sourceCode">
-        <textarea class="form-control"
-                  formControlName="text"
-
-                  [value]="document?.sourceCode">
-        </textarea>
-      </form>
+    <div class="col-6">
+      <div class="pre-scrollable">
+        <form [formGroup]="sourceCode">
+          <textarea class="form-control" rows="30" formControlName="text" [(ngModel)]="document.sourceCode"></textarea>
+        </form>
+      </div>
     </div>
-    <div class="col-md-4">
-      <div *ngFor="let generatedPage of this.generatedDocument.generatedPages; let i = index" style="margin: auto">
-        <img class="image-holder border" style="max-width:100%; max-height: 100%" [src]=convertImage(generatedPage) />
+    <div class="col pre-scrollable">
+      <div *ngFor="let generatedPage of this.generatedDocument.generatedPages; let i = index">
+        <img class="image-holder border" style="max-width:100%; max-height: 100%" [src]=convertPage(generatedPage) />
+      </div>
+    </div>
+    <!--    <div class="vr"></div>-->
+    <div class="col">
+      <div class="pre-scrollable">
+        <div class="card">
+          <h5>Upload Images</h5>
+          <div class="container row">
+            <input type="file" class="form-control" (change)="onFileChanged($event)" multiple="multiple"
+                   accept="image/png, image/gif, image/jpeg">
+          </div>
+        </div>
+        <div class="card">
+          <h5>Uploaded images</h5>
+
+          <ul *ngFor="let image of images" class="list-group list-group-flush">
+            <li class="list-group-item card-body">
+              <label>{{image.name}}</label>
+              <img class="images" src="{{convertImage(image)}}"/>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

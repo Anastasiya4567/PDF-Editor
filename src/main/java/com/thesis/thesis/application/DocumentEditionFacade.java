@@ -1,12 +1,14 @@
 package com.thesis.thesis.application;
 
 import com.thesis.thesis.application.domain.*;
+import com.thesis.thesis.infrastructure.adapter.mongo.document.PDFDocument;
+import com.thesis.thesis.interfaces.rest.requests.GenerateDocumentRequest;
 import com.thesis.thesis.misc.Converter;
-import com.thesis.thesis.infrastructure.adapter.mongo.PDFDocument;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
+import javax.transaction.Transactional;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,28 +20,31 @@ public class DocumentEditionFacade {
 
     private final GeneratedDocumentRepository generatedDocumentRepository;
 
-    public DocumentEditionFacade(DocumentRepository documentRepository, GeneratedDocumentRepository generatedDocumentRepository) {
+    private final ImageRepository imageRepository;
+
+    public DocumentEditionFacade(DocumentRepository documentRepository, GeneratedDocumentRepository generatedDocumentRepository, ImageRepository imageRepository) {
         this.documentRepository = documentRepository;
         this.generatedDocumentRepository = generatedDocumentRepository;
+        this.imageRepository = imageRepository;
     }
 
-    @MongoTransactional
-    public void generatePDFFromSourceText(PDFDocument pdfDocument) throws IOException {
-        PDFDocument pdfDocumentToEdit = saveSourceCode(pdfDocument.id, pdfDocument.sourceCode);
-        DocumentScanner documentScanner = new DocumentScanner(pdfDocument.sourceCode);
+    @Transactional
+    public void generatePDFFromSourceCode(GenerateDocumentRequest generateDocumentRequest) throws IOException {
+        PDFDocument pdfDocumentToEdit = saveSourceCode(generateDocumentRequest.getId(), generateDocumentRequest.getSourceCode());
+        DocumentScanner documentScanner = new DocumentScanner();
+        documentScanner.setSourceText(generateDocumentRequest.getSourceCode() + '\0');
         List<Token> tokens = documentScanner.scan();
-        DocumentParser documentParser = new DocumentParser(tokens);
-        PDDocument document = documentParser.parse();
+        DocumentParser documentParser = new DocumentParser(imageRepository);
+        documentParser.setTokens(tokens);
+        PDDocument document = documentParser.parse(generateDocumentRequest.getId());
+
         PDFRenderer pdfRenderer = new PDFRenderer(document);
-        List<String> stringPages = new ArrayList();
+        List<String> stringPages = new ArrayList<>();
         for (int page = 0; page < document.getNumberOfPages(); ++page) {
             BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
             stringPages.add(Converter.imgToString(bufferedImage));
-
-//            ImageIOUtil.writeImage(
-//                    bufferedImage, String.format("src/output/pdf-%d.%s", page + 1, extension), 300);
-//            String stringImg = imgToString(bufferedImage, "pdf");
         }
+        document.close();
         saveGeneratedDocument(pdfDocumentToEdit.generatedDocumentId, stringPages);
     }
 

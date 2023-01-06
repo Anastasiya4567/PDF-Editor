@@ -7,6 +7,7 @@ import {LoginData} from "../../models/LoginData";
 import {API_BASE_URL, ACCESS_TOKEN} from '../../constants/app-constants.component';
 import {MessageResponse} from "../../models/MessageResponse";
 import {Account} from "../../models/Account";
+import {UserDetails} from "../../models/UserDetails";
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +42,15 @@ export class AccountService {
 
   get getIsLoggedIn(): Observable<boolean> {
     return this.isLoggedIn.asObservable();
+  }
+
+  setHeaders() {
+    const headers = new HttpHeaders();
+    return headers.append('Authorization', 'Bearer ' + this.cookieService.get(ACCESS_TOKEN));
+  }
+
+  getProfileDetails(): Observable<UserDetails> {
+    return this.http.get<any>(API_BASE_URL + '/user/me', {headers: this.setHeaders() });
   }
 
 }

@@ -3,10 +3,12 @@ package com.thesis.thesis.application;
 import com.thesis.thesis.application.domain.DocumentPort;
 import com.thesis.thesis.application.domain.DocumentRepository;
 import com.thesis.thesis.application.domain.GeneratedDocumentRepository;
+import com.thesis.thesis.application.domain.ImageRepository;
 import com.thesis.thesis.application.mapper.DocumentMapper;
 import com.thesis.thesis.application.mapper.GeneratedDocumentMapper;
-import com.thesis.thesis.infrastructure.adapter.mongo.GeneratedPDF;
-import com.thesis.thesis.infrastructure.adapter.mongo.PDFDocument;
+import com.thesis.thesis.infrastructure.adapter.mongo.document.GeneratedPDF;
+import com.thesis.thesis.infrastructure.adapter.mongo.document.Image;
+import com.thesis.thesis.infrastructure.adapter.mongo.document.PDFDocument;
 import com.thesis.thesis.misc.Converter;
 import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -37,14 +39,17 @@ public class DocumentFacade {
 
     private final GeneratedDocumentRepository generatedDocumentRepository;
 
+    private final ImageRepository imageRepository;
+
     private final DocumentMapper documentMapper = Mappers.getMapper(DocumentMapper.class);
 
     private final GeneratedDocumentMapper generatedDocumentMapper = Mappers.getMapper(GeneratedDocumentMapper.class);
 
-    public DocumentFacade(DocumentPort documentPort, DocumentRepository documentRepository, GeneratedDocumentRepository generatedDocumentRepository) {
+    public DocumentFacade(DocumentPort documentPort, DocumentRepository documentRepository, GeneratedDocumentRepository generatedDocumentRepository, ImageRepository imageRepository) {
         this.documentPort = documentPort;
         this.documentRepository = documentRepository;
         this.generatedDocumentRepository = generatedDocumentRepository;
+        this.imageRepository = imageRepository;
     }
 
     public Page<PDFDocumentDTO> getFilteredDocuments(String ownerEmail, int pageIndex, int pageSize, String title) {
@@ -66,24 +71,12 @@ public class DocumentFacade {
         PDPage blankPage = new PDPage();
         document.addPage(blankPage);
 
-        // ***
-//        PDPageContentStream contentStream = new PDPageContentStream(document, blankPage);
-//        contentStream.beginText();
-//        contentStream.newLineAtOffset(10, 500);
-//        contentStream.setFont(new PDType1Font(HELVETICA_BOLD), 10);
-//        contentStream.showText("Hello Hello Hello Hello Hello");
-//        contentStream.endText();
-//        contentStream.close();
-        // ***
-
         PDFRenderer pdfRenderer = new PDFRenderer(document);
-
         BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);
         List<String> stringPages = List.of(Converter.imgToString(bufferedImage));
         document.close();
         return new GeneratedPDF(generatedDocumentId, stringPages);
     }
-
 
     public PDFDocumentDTO getDocumentById(String id) {
         return documentMapper.mapFromDocument(documentRepository.findById(id));
@@ -111,14 +104,24 @@ public class DocumentFacade {
         documentRepository.deleteById(pdfDocument.id);
     }
 
+    public void renameDocument(String newTitle, String id) {
+        PDFDocument load = documentRepository.findById(id);
+        load.title = newTitle;
+        documentRepository.save(load);
+    }
+
     public GeneratedDocumentDTO getGeneratedDocumentById(String id) {
         GeneratedPDF load = generatedDocumentRepository.load(id);
         return generatedDocumentMapper.mapFromDocument(load);
     }
 
-    public void renameDocument(String newTitle, String id) {
-        PDFDocument load = documentRepository.findById(id);
-        load.title = newTitle;
-        documentRepository.save(load);
+    public List<Image> getImagesById(String documentId) {
+        return imageRepository.findAllByDocumentId(documentId);
+    }
+
+    @Transactional
+    public void addNewImage(Image image, String documentId) {
+        image.documentId = documentId;
+        imageRepository.save(image);
     }
 }

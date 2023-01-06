@@ -1,5 +1,6 @@
 package com.thesis.thesis.infrastructure.adapter.mongo;
 
+import com.thesis.thesis.infrastructure.adapter.mongo.document.GeneratedPDF;
 import com.thesis.thesis.infrastructure.port.GeneratedDocumentPersistencePort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 

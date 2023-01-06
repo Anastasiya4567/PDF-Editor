@@ -29,6 +29,10 @@ export class DashboardComponent implements OnInit {
   logout() {
     this.cookieService.delete(ACCESS_TOKEN);
     this.isAuthenticated = false;
-    this.router.navigate(['/login']);
+    this.toLoginPage();
+  }
+
+  toLoginPage() {
+    this.router.navigate(['/login'])
   }
 }
