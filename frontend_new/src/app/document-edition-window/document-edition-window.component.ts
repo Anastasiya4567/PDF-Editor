@@ -10,6 +10,8 @@ import {GeneratedDocument} from "../models/GeneratedDocument";
 import {CookieService} from "ngx-cookie-service";
 import {GeneratedDocumentService} from "../services/generated-document/generated-document.service";
 import {DocumentService} from "../services/document/document.service";
+import {Image} from "../models/Image";
+import jsPDF from "jspdf";
 
 @Component({
   selector: 'app-document-edition-window',
@@ -19,13 +21,15 @@ import {DocumentService} from "../services/document/document.service";
 export class DocumentEditionWindowComponent implements OnInit {
 
   id: string | null = this.activatedRoute.snapshot.paramMap.get('id')
-  document: PDFDocument;
+  document: PDFDocument = new PDFDocument('');
   generatedDocument: GeneratedDocument;
   sourceCode: FormGroup;
+  images: Image[] = [];
 
   saveKeyboardShortcutDef: IKeyboardShortcutListenerOptions = {
     description: 'recompile source code',
-    keyBinding: [KeyboardKeys.Ctrl, 's']
+    // TODO
+    keyBinding: [KeyboardKeys.Ctrl, 'r']
   }
 
   constructor(private httpClient: HttpClient,
@@ -38,25 +42,27 @@ export class DocumentEditionWindowComponent implements OnInit {
               private documentService: DocumentService,
               private generatedDocumentService: GeneratedDocumentService) {
     this.sourceCode = this.formBuilder.group({
-      text: ['', Validators.required]
-    })
+      text: [this.document.sourceCode, Validators.required]
+    });
   }
 
   ngOnInit(): void {
     this.getDocumentById();
   }
 
-  convertImage(generatedPage: String): SafeUrl {
+  convertPage(generatedPage: String): SafeUrl {
     return this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,' + generatedPage);
   }
 
   private getDocumentById() {
+    console.log(this.document.sourceCode)
 
     this.documentService.getDocumentById(this.id).subscribe(
       (response: any) => {
         this.document = response;
+        this.sourceCode.value.text = this.document.sourceCode;
         this.getGeneratedDocument();
-        console.log(this.document);
+        this.getImages();
       });
   }
 
@@ -72,13 +78,35 @@ export class DocumentEditionWindowComponent implements OnInit {
     modal.close();
   }
 
-  saveSourceCode() {
+  public onFileChanged(event: any): void {
+
+    for (const file of event.target.files) {
+      const fileReader = new FileReader();
+
+      fileReader.onloadend = (e) => {
+        // 4
+        const data = fileReader.result as string;
+        const image = new Image();
+        image.name = file.name;
+        image.data = data.slice(data.indexOf('base64,') + 'base64,'.length, data.length);
+        image.extension = data.slice(11, data.indexOf(';base64,'));
+        this.saveImage(image);
+        this.images.push(image);
+      };
+      fileReader.readAsDataURL(file);
+    }
+  }
+
+  convertImage(image: Image): string {
+    return ('data:image/' + image.extension + ';base64,' + image.data);
+  }
+
+  save() {
     if (this.sourceCode.invalid)
       return;
 
     const body = {
       id: this.document.id,
-      title: this.document.title,
       sourceCode: this.sourceCode.value.text
     }
 
@@ -94,23 +122,63 @@ export class DocumentEditionWindowComponent implements OnInit {
   }
 
   saveSourceCodeAndExit(modal: any) {
-    this.saveSourceCode();
+    this.save();
     this.closeModal(modal);
   }
 
   recompile() {
     console.log('recompiled')
-    this.saveSourceCode();
+    this.save();
     this.getDocumentById();
   }
 
   private getGeneratedDocument() {
-    console.log(this.document.generatedDocumentId)
-
     this.generatedDocumentService.getGeneratedDocument(this.document.generatedDocumentId).subscribe(
       (response: any) => {
         console.log(response)
         this.generatedDocument = response;
       })
+  }
+
+  private getImages() {
+    this.generatedDocumentService.getImages(this.document.id).subscribe(
+      (response: any) => {
+        console.log(response)
+        this.images = response;
+      })
+  }
+
+  private saveImage(image: Image) {
+    this.generatedDocumentService.saveImage(image, this.document.id).subscribe(
+      (response: any) => {
+        console.log(response)
+      })
+  }
+
+  download() {
+    let doc = new jsPDF('p', 'px', 'a4');
+    const width = doc.internal.pageSize.getWidth();
+    const height = doc.internal.pageSize.getHeight();
+
+    for (let i = 0; i < this.generatedDocument.generatedPages.length; i++) {
+      let pageData: any = this.generatedDocument.generatedPages[i];
+
+      doc.addImage(
+        pageData,
+        'JPG',
+        10,
+        10,
+        width,
+        height
+      );
+      if (!this.isLastPage(i)) {
+        doc.addPage();
+      }
+    }
+    doc.save(this.document.title + '.pdf');
+  }
+
+  private isLastPage(pageNumber: number) {
+    return pageNumber == this.generatedDocument.generatedPages.length - 1;
   }
 }

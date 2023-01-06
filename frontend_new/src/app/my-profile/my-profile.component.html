@@ -1,15 +1,31 @@
-<div class="card my-profile-card">
-  <h4 class="card-header">My profile</h4>
-  <div class="card-body">
-    <div>
-      <div>Name</div>
-      <h5>namePlaceholder</h5>
+<div class="container-fluid">
+  <div class="card">
+    <h4 class="card-header">My profile</h4>
+    <div class="card-body">
 
-      <div>Email</div>
-      <h5>emailPlaceholder</h5>
+      <div class="row">
+        <div *ngIf="userDetails.imageUrl" class="col col-lg-2">
+          <div>
+            <img class="images" src="{{userDetails.imageUrl}}"/>
+          </div>
+        </div>
 
-      <div class="text-center">
-        <button class="text-center btn btn-primary disabled">Edit</button></div>
+        <div class="col">
+          <div>Name</div>
+          <h5>{{userDetails.name}}</h5>
+
+          <div>Email</div>
+          <h5>{{userDetails.email}}</h5>
+
+          <div [ngSwitch]="userDetails.provider">Provider
+            <h5 *ngSwitchCase="'local'">Standard authentication</h5>
+            <h5 *ngSwitchCase="'google'">Google</h5>
+            <h5 *ngSwitchCase="'github'">GitHub</h5>
+          </div>
+        </div>
+
+      </div>
+
     </div>
   </div>
 </div>

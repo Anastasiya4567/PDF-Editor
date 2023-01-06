@@ -22,6 +22,7 @@ import { SocialLoginComponent } from './login/social-login/social-login.componen
 import { RegisterFormComponent } from './register/register-form/register-form.component';
 import { AboutComponent } from './about/about.component';
 import { OAuth2RedirectHandlerComponent } from './redirect/oauth2-redirect-handler/oauth2-redirect-handler.component';
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   declarations: [
@@ -40,16 +41,17 @@ import { OAuth2RedirectHandlerComponent } from './redirect/oauth2-redirect-handl
     AboutComponent,
     OAuth2RedirectHandlerComponent
   ],
-  imports: [
-    BrowserModule,
-    RouterModule,
-    AppRoutingModule,
-    NgxPaginationModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxKeyboardShortcutModule
-  ],
+    imports: [
+        BrowserModule,
+        RouterModule,
+        AppRoutingModule,
+        NgxPaginationModule,
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgxKeyboardShortcutModule,
+        NgbModule
+    ],
   providers: [
     CookieService,
     AllDocumentsComponent

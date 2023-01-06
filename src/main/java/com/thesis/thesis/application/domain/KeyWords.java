@@ -5,6 +5,7 @@ public enum KeyWords {
     TITLE,
     AUTHOR,
     DATE,
+    TEXT,
     IMG,
     SECTION,
     END,

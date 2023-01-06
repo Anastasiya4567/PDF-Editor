@@ -1,4 +1,4 @@
-package com.thesis.thesis.infrastructure.adapter.mongo;
+package com.thesis.thesis.infrastructure.adapter.mongo.document;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;

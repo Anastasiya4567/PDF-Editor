@@ -1,6 +1,6 @@
 package com.thesis.thesis.infrastructure.port;
 
-import com.thesis.thesis.infrastructure.adapter.mongo.GeneratedPDF;
+import com.thesis.thesis.infrastructure.adapter.mongo.document.GeneratedPDF;
 
 import java.util.Optional;
 

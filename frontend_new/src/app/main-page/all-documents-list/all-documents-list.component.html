@@ -35,10 +35,21 @@
 <div *ngIf="documents.length > 0; then showDocuments else noDocuments"></div>
 <ng-template #showDocuments>
   <div class="text-center">
-    <div *ngFor="let document of documents | paginate: { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }">
+    <div
+      *ngFor="let document of documents | paginate: { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }">
       <div class="card" style="margin: 30px">
-        <div class="card-header d-flex justify-content-between" >
-          <h5 class="card-title text-break">{{document.title}}</h5>
+        <div class="card-header d-flex justify-content-between">
+          <h5 class="card-title text-break">{{document.title}}
+            <i class="bi bi-info-circle" placement="right" [ngbTooltip]="documentInfo"></i>
+            <ng-template #documentInfo>
+              <div>
+                <div>Owner email: {{document.ownerEmail}}</div>
+                <div>Access: {{document.privateAccess? "private": "public"}}</div>
+                <div>Creation date: {{document.creationDate | date: dateFormat}}</div>
+              </div>
+            </ng-template>
+          </h5>
+
           <button (click)="openModal(contentRename, document)">Rename
             <i class="bi bi-pencil"></i>
           </button>
@@ -55,7 +66,8 @@
           </div>
         </div>
 
-        <div class="text-end">Creation date: {{document.creationDate | date: dateFormat}}</div>
+
+        <!--        <div class="text-end">Creation date: {{document.creationDate | date: dateFormat}}</div>-->
       </div>
     </div>
   </div>
@@ -87,28 +99,28 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <input class="form-control"
-               type="text"
-               [formControl]="newTitle"
-               placeholder="Title"
-               [ngClass]="{'is-invalid': isSubmitted && newTitle.errors}"/>
-        <div *ngIf="newTitle.errors" class="invalid-feedback">
-          Title can't be empty
-        </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <input class="form-control"
+             type="text"
+             [formControl]="newTitle"
+             placeholder="Title"
+             [ngClass]="{'is-invalid': isSubmitted && newTitle.errors}"/>
+      <div *ngIf="newTitle.errors" class="invalid-feedback">
+        Title can't be empty
       </div>
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal(modal)">Cancel</button>
-      <div class="form-group">
-        <button type="button"
-                [ngClass]="newTitle.value == document.title ? 'btn btn-primary disabled' : 'btn btn-primary'"
-                (click)="onSubmit(modal)">
-          Submit
-        </button>
-      </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal(modal)">Cancel</button>
+    <div class="form-group">
+      <button type="button"
+              [ngClass]="newTitle.value == document.title ? 'btn btn-primary disabled' : 'btn btn-primary'"
+              (click)="onSubmit(modal)">
+        Submit
+      </button>
     </div>
+  </div>
 </ng-template>
 
-<!--class="btn btn-primary"-->
+

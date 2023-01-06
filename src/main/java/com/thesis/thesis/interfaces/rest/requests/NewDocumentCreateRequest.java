@@ -1,12 +1,12 @@
-package com.thesis.thesis.application;
+package com.thesis.thesis.interfaces.rest.requests;
 
-public class NewDocumentCreate {
+public class NewDocumentCreateRequest {
 
     private String title;
 
     private Boolean privateAccess;
 
-    public NewDocumentCreate() {
+    public NewDocumentCreateRequest() {
     }
 
     public void setTitle(String title) {
