@@ -1,6 +1,7 @@
 package com.thesis.thesis.application;
 
 import com.thesis.thesis.application.domain.*;
+import com.thesis.thesis.application.domain.token.Token;
 import com.thesis.thesis.infrastructure.adapter.mongo.document.PDFDocument;
 import com.thesis.thesis.interfaces.rest.requests.GenerateDocumentRequest;
 import com.thesis.thesis.misc.Converter;
