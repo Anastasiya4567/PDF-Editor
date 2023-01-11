@@ -27,7 +27,6 @@ spring:
     oauth2:
       client:
         registration:
-#          http://localhost:4200/login/oath2/google
           google:
             clientId: 780110692711-ssf04377tlbsqo12728g4fiumndsplpg.apps.googleusercontent.com
             clientSecret: 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
@@ -35,13 +34,13 @@ spring:
             scope:
               - email
               - profile
-          github:
-            clientId: 919141426be7a5662f5f
-            clientSecret: 230f0dd8b1eef4b89333afd5e2f4ddcd91263375
+          facebook:
+            clientId: 3480580642161692
+            clientSecret: d2f52103fb154e5cf77e706c2ad35594
             redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
-              - user:email
-              - read:user
+              - email
+              - public_profile
 
 app:
 #  replace token secret
