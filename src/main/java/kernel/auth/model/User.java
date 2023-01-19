@@ -24,9 +24,6 @@ public class User {
 
     private String imageUrl;
 
-    @Column(name = "email_verified", nullable = false)
-    private final Boolean emailVerified = false;
-
     @JsonIgnore
     private String password;
 
@@ -66,10 +63,6 @@ public class User {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public Boolean getEmailVerified() {
-        return emailVerified;
     }
 
     public String getPassword() {

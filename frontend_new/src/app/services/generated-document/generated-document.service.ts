@@ -16,8 +16,8 @@ export class GeneratedDocumentService {
               private cookieService: CookieService) {
   }
 
-  getGeneratedDocument(generatedDocumentId: string): Observable<GeneratedDocument> {
-    return this.http.get<GeneratedDocument>(API_BASE_URL + '/getGeneratedDocument?id=' + generatedDocumentId,
+  getGeneratedDocument(documentId: string): Observable<GeneratedDocument> {
+    return this.http.get<GeneratedDocument>(API_BASE_URL + '/getGeneratedDocument?documentId=' + documentId,
       {headers: this.setHeaders()});
   }
 

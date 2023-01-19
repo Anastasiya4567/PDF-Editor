@@ -23,7 +23,7 @@ export class AllDocumentsComponent implements OnInit {
   document: PDFDocument;
   titleFilter = new FormControl('');
   deleted: boolean = false;
-  alertMessage: string;
+  message: string;
   newTitle = new FormControl('');
   isSubmitted = false;
   dateFormat = dateFormat.long;
@@ -70,9 +70,10 @@ export class AllDocumentsComponent implements OnInit {
   }
 
   deleteDocument(modal: any) {
+    this.message = '';
     this.documentService.deleteDocument(this.document).subscribe(
       (response: any) => {
-        this.alertMessage = response.message;
+        this.message = response.message;
         this.deleted = true;
         this.getAllDocuments(0);
       }, error => {
@@ -96,10 +97,6 @@ export class AllDocumentsComponent implements OnInit {
     this.getAllDocuments(0);
   }
 
-  clearAlert() {
-    this.deleted = false;
-  }
-
   onSubmit(modal: any) {
     this.isSubmitted = true;
 
@@ -113,8 +110,10 @@ export class AllDocumentsComponent implements OnInit {
   }
 
   private renameDocument() {
+    this.message = '';
     this.documentService.renameDocument(this.document.id, this.newTitle.value).subscribe(
       (response: any) => {
+        this.message = response.message;
         console.log(response)
         console.log(this.page)
           this.getAllDocuments(this.page-1)

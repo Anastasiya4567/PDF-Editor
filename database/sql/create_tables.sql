@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(50) NOT NULL,
     email VARCHAR(120) UNIQUE NOT NULL,
     image_url VARCHAR(255),
-    email_verified BOOLEAN DEFAULT FALSE,
     password VARCHAR(60),
     provider VARCHAR(20) NOT NULL,
     provider_id VARCHAR(50),

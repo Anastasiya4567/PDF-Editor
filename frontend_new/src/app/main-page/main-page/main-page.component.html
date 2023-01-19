@@ -1,5 +1,12 @@
 <div>
-  <button type="button" class="btn btn-primary" (click)="openModal(content)">
+  <ngb-toast *ngIf="message" header="Notification" [autohide]="false" (hidden)="message.length === 0">
+    {{message}}
+  </ngb-toast>
+</div>
+
+
+<div class="text-end">
+  <button class="btn btn-primary new" (click)="openModal(content)">
     New document
   </button>
 </div>
@@ -47,18 +54,34 @@
                  name="privateAccess"
                  value="false">
           public
-
         </div>
       </div>
     </div>
 
+<!--    <div class="modal-footer">-->
+<!--      <button class="btn btn-secondary" data-dismiss="modal" (click)="closeModal(modal)">Cancel</button>-->
+<!--      <div class="form-group">-->
+<!--        <button-->
+<!--          [ngClass]="this.documentData.value.title ? 'btn btn-primary' : 'btn btn-primary disabled'"-->
+<!--          class="btn btn-primary">-->
+<!--          Create-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
 
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal(modal)">Cancel</button>
-      <div class="form-group">
-        <button class="btn btn-primary">Create</button>
+      <div class="btn-group me-2" role="group">
+        <button class="btn btn-secondary" data-dismiss="modal" (click)="closeModal(modal)">Cancel</button>
+      </div>
+      <div class="btn-group me-2" role="group">
+        <button
+          [ngClass]="this.documentData.value.title ? 'btn btn-primary' : 'btn btn-primary disabled'"
+          class="btn btn-primary">
+          Create
+        </button>
       </div>
     </div>
+
   </form>
 </ng-template>
 

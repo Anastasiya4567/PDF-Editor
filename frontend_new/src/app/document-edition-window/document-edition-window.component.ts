@@ -25,6 +25,7 @@ export class DocumentEditionWindowComponent implements OnInit {
   generatedDocument: GeneratedDocument;
   sourceCode: FormGroup;
   images: Image[] = [];
+  loading: boolean = false;
 
   saveKeyboardShortcutDef: IKeyboardShortcutListenerOptions = {
     description: 'recompile source code',
@@ -42,7 +43,7 @@ export class DocumentEditionWindowComponent implements OnInit {
               private documentService: DocumentService,
               private generatedDocumentService: GeneratedDocumentService) {
     this.sourceCode = this.formBuilder.group({
-      text: [this.document.sourceCode, Validators.required]
+      text: ['', Validators.required]
     });
   }
 
@@ -55,8 +56,6 @@ export class DocumentEditionWindowComponent implements OnInit {
   }
 
   private getDocumentById() {
-    console.log(this.document.sourceCode)
-
     this.documentService.getDocumentById(this.id).subscribe(
       (response: any) => {
         this.document = response;
@@ -71,7 +70,10 @@ export class DocumentEditionWindowComponent implements OnInit {
   }
 
   openModal(content: any) {
-    this.modalService.open(content);
+    if (this.document.sourceCode != this.sourceCode.value.text)
+      this.modalService.open(content);
+    else
+      this.backToMainPage();
   }
 
   closeModal(modal: any) {
@@ -84,7 +86,6 @@ export class DocumentEditionWindowComponent implements OnInit {
       const fileReader = new FileReader();
 
       fileReader.onloadend = (e) => {
-        // 4
         const data = fileReader.result as string;
         const image = new Image();
         image.name = file.name;
@@ -114,7 +115,7 @@ export class DocumentEditionWindowComponent implements OnInit {
       (response: any) => {
         if (response.status == 200) {
           console.log('generated ' + this.document.title)
-          this.backToMainPage();
+          // this.getDocumentById();
         } else {
           console.log('Error saving generated document')
         }
@@ -124,16 +125,17 @@ export class DocumentEditionWindowComponent implements OnInit {
   saveSourceCodeAndExit(modal: any) {
     this.save();
     this.closeModal(modal);
+    this.backToMainPage();
   }
 
   recompile() {
     console.log('recompiled')
     this.save();
-    this.getDocumentById();
   }
 
   private getGeneratedDocument() {
-    this.generatedDocumentService.getGeneratedDocument(this.document.generatedDocumentId).subscribe(
+    // checks
+    this.generatedDocumentService.getGeneratedDocument(this.document.id).subscribe(
       (response: any) => {
         console.log(response)
         this.generatedDocument = response;

@@ -1,8 +1,28 @@
 <div class="container-fluid">
-  <div class="card">
-    <h4 class="card-header">About PDFEditor</h4>
+  <div class="card documents-card ">
+    <h4 class="card-header">About PDF Editor</h4>
     <div class="card-body">
-      AboutPlaceholder AboutPlaceholder AboutPlaceholder AboutPlaceholder AboutPlaceholder AboutPlaceholder
+      This program was written in 2022-2023 for creation and modification of files in PDF format. It enables to
+      insert titles, text and images to document with the use of special tags:
+      <br>
+      <br>\title - insertion of the title with default font size (12) at horizontal center
+      <br>\title(fontSize) - insertion of the title with specified font size at horizontal center
+      <br>\text - insertion of the text with default font size (12)
+      <br>\text(fontSize) - insertion of the text with specified font size
+      <br>\img - insertion of the image with default width(300) and height(200) at horizontal center
+      <br>\img(width,height) - insertion of the image with specified width and height at horizontal center
+      <br>\\ - comment just for user needs, not inserted
+      <br>
+      <br>It's required to have a separation space between tag and value. In case of image the user must write the name
+      of the image (with extension). For instance: \img example_image.jpg.
+      <br>
+      <br>Example usages of tags:
+      <br>
+      <br>\title(16) Example title
+      <br>\text Example text
+      <br>\img(200,150) example_image.png
+      <br>\\ example comment
+      <br>
     </div>
   </div>
 </div>
