@@ -61,17 +61,11 @@
 <ng-template #content let-modal>
   <div class="modal-header"></div>
   <div class="modal-body">
-    <div class="form-group">
-      Confirm deletion
-    </div>
+    <div class="form-group">Confirm deletion</div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="deleteDocument(modal)">
-      Yes
-    </button>
-    <button class="btn btn-primary" (click)="closeModal(modal)">
-      No
-    </button>
+    <button type="button" class="btn btn-secondary" (click)="deleteDocument(modal)">Yes</button>
+    <button class="btn btn-primary" (click)="closeModal(modal)">No</button>
   </div>
 </ng-template>
 
@@ -105,5 +99,3 @@
     </div>
   </div>
 </ng-template>
-
-

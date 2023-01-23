@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {LoginData} from "../../models/LoginData";
 import {AccountService} from "../../services/account/account.service";
-
-import {ACCESS_TOKEN} from "../../constants/app-constants.component";
 
 @Component({
   selector: 'app-login-form',
@@ -44,7 +42,6 @@ export class LoginFormComponent implements OnInit {
 
     if (this.loginForm.invalid) {
       this.loading = false;
-      console.log('inv');
       return;
     }
 

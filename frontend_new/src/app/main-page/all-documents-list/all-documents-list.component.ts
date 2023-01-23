@@ -63,7 +63,6 @@ export class AllDocumentsComponent implements OnInit {
   }
 
   editDocument(document: PDFDocument) {
-    console.log('id: ' + document.id)
     this.router.navigate(['document/' + document.id], {
       relativeTo: this.activatedRoute
     })
@@ -101,7 +100,6 @@ export class AllDocumentsComponent implements OnInit {
     this.isSubmitted = true;
 
     if (this.newTitle.invalid) {
-      console.log('empty title');
       return;
     }
 
@@ -114,8 +112,6 @@ export class AllDocumentsComponent implements OnInit {
     this.documentService.renameDocument(this.document.id, this.newTitle.value).subscribe(
       (response: any) => {
         this.message = response.message;
-        console.log(response)
-        console.log(this.page)
           this.getAllDocuments(this.page-1)
         }, error => {
         console.log(error)

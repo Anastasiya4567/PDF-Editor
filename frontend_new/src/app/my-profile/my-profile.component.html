@@ -13,10 +13,8 @@
         <div class="col">
           <div>Name</div>
           <h5>{{userDetails.name}}</h5>
-
           <div>Email</div>
           <h5>{{userDetails.email}}</h5>
-
           <div [ngSwitch]="userDetails.provider">Provider
             <h5 *ngSwitchCase="'local'">Standard authentication</h5>
             <h5 *ngSwitchCase="'google'">Google</h5>
