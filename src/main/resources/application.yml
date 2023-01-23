@@ -9,7 +9,6 @@ server:
 spring:
   data:
     mongodb:
-#      ??
       uri: "mongodb://root:root@localhost:8085/"
       database: pdf-db
 
@@ -18,7 +17,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-#    not full
     url: "jdbc:postgresql://localhost:5432/users"
     username: postgres
     password: postgres
@@ -46,7 +44,8 @@ app:
 #  replace token secret
   auth:
     tokenSecret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
-    tokenExpirationMsec: 864000000
+#    tokenExpirationMsec: 10800000
+    tokenExpirationMsec: 600000
   cors:
     allowedOrigins: http://localhost:4200
   oauth2:

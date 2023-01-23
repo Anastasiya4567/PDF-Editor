@@ -5,7 +5,6 @@ export class PDFDocument {
   privateAccess: boolean;
   sourceCode: string;
   creationDate: Date | string;
-  generatedDocumentId: string;
 
   constructor(sourceCode: string) {
     this.sourceCode = sourceCode;

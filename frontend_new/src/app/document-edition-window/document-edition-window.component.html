@@ -1,11 +1,12 @@
-<script src="document-edition-window.component.ts"></script>
-<button class="btn btn-secondary" (click)="openModal(content)">
-  Back
-</button>
+<div>
+  <div class="btn-group me-2" role="group">
+    <button class="btn btn-secondary" (click)="openModal(content)">Back</button>
+  </div>
+  <div class="btn-group me-2" role="group">
+    <button class="btn btn-primary" (click)="download()">Download PDF</button>
+  </div>
+</div>
 
-<button class="btn btn-primary justify-content-end" (click)="download()">
-  Download PDF
-</button>
 
 <div class="text-center">
   <h3>{{document.title}}</h3>
@@ -22,34 +23,39 @@
     <div class="col-6">
       <div class="pre-scrollable">
         <form [formGroup]="sourceCode">
-          <textarea class="form-control" rows="30" formControlName="text" [(ngModel)]="document.sourceCode"></textarea>
+          <textarea class="form-control" rows="30" formControlName="text"
+                    [(ngModel)]="sourceCode.value.text"></textarea>
         </form>
       </div>
     </div>
     <div class="col pre-scrollable">
-      <div *ngFor="let generatedPage of this.generatedDocument.generatedPages; let i = index">
-        <img class="image-holder border" style="max-width:100%; max-height: 100%" [src]=convertPage(generatedPage) />
+<!--      <div *ngIf="loading" class="spinner-border" role="status">-->
+<!--        <span class="sr-only">Loading...</span>-->
+<!--      </div>-->
+<!--      <div *ngIf="!loading">-->
+      <div>
+        <div *ngFor="let generatedPage of this.generatedDocument.generatedPages; let i = index">
+          <img class="image-holder border" style="max-width:100%; max-height: 100%" [src]=convertPage(generatedPage)/>
+        </div>
       </div>
     </div>
-    <!--    <div class="vr"></div>-->
     <div class="col">
+      <div>
+        <h5 class="img-upload text-center">Upload images</h5>
+        <input type="file" class="form-control img-upload" (change)="onFileChanged($event)" multiple="multiple"
+               accept="image/png, image/gif, image/jpeg">
+      </div>
       <div class="pre-scrollable">
         <div class="card">
-          <h5>Upload Images</h5>
-          <div class="container row">
-            <input type="file" class="form-control" (change)="onFileChanged($event)" multiple="multiple"
-                   accept="image/png, image/gif, image/jpeg">
+          <h5 class="card-header text-center">Uploaded images</h5>
+          <div class="card-body">
+            <ul *ngFor="let image of images" class="list-group list-group-flush">
+              <li class="list-group-item card-body">
+                <label>{{image.name}}</label>
+                <img class="images" src="{{convertImage(image)}}"/>
+              </li>
+            </ul>
           </div>
-        </div>
-        <div class="card">
-          <h5>Uploaded images</h5>
-
-          <ul *ngFor="let image of images" class="list-group list-group-flush">
-            <li class="list-group-item card-body">
-              <label>{{image.name}}</label>
-              <img class="images" src="{{convertImage(image)}}"/>
-            </li>
-          </ul>
         </div>
       </div>
     </div>
@@ -69,13 +75,13 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="saveSourceCodeAndExit(modal)">
+    <button type="button" class="btn btn-primary" (click)="saveSourceCodeAndExit(modal)">
       Yes
     </button>
-    <button class="btn btn-primary" (click)="closeModal(modal); backToMainPage()">
+    <button class="btn btn-secondary" (click)="closeModal(modal); backToMainPage()">
       No
     </button>
-    <button class="btn btn-primary" (click)="closeModal(modal)">
+    <button class="btn btn-info" (click)="closeModal(modal)">
       Cancel
     </button>
   </div>

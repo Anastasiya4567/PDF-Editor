@@ -15,6 +15,7 @@ export class MainPageComponent implements OnInit {
 
   documentData: FormGroup;
   createdDocument = new NewDocumentCreateRequest();
+  message: string;
 
   isSubmitted = false;
 
@@ -41,7 +42,6 @@ export class MainPageComponent implements OnInit {
     this.isSubmitted = true;
 
     if (this.documentData.invalid) {
-      console.log('empty title');
       return;
     }
 
@@ -50,21 +50,17 @@ export class MainPageComponent implements OnInit {
   }
 
   createNewDocument() {
-
-    console.log(this.documentData.value.title)
-    console.log(this.documentData.value.privateAccess)
+    this.message = '';
 
     this.createdDocument.title = this.documentData.value.title;
     this.createdDocument.privateAccess = this.documentData.value.privateAccess;
 
     this.documentService.createNewDocument(this.createdDocument).subscribe(
       (response: any) => {
-        console.log(response)
         if (response.status == 200) {
-            console.log(response.message)
-            this.allDocumentsComponent.getAllDocuments(0)
+          this.allDocumentsComponent.getAllDocuments(0)
         } else {
-          console.log('Error saving new document')
+          this.message = response.message;
         }
       })
   }

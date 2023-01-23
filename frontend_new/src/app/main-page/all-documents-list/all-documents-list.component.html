@@ -1,62 +1,48 @@
-<div *ngIf="deleted" class="alert alert-success" role="alert">
-  {{alertMessage}}
-  <button type="button" class="btn close" data-dismiss="alert" aria-label="Close" (click)="clearAlert()">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-
-<!--<div *ngIf="!deleted" class="toast" role="alert" aria-live="assertive" aria-atomic="true">-->
-<!--  <div class="toast-header">-->
-<!--    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">-->
-<!--      <span aria-hidden="true">&times;</span>-->
-<!--    </button>-->
-<!--  </div>-->
-<!--  <div class="toast-body">-->
-<!--    {{alertMessage}}-->
-<!--  </div>-->
-<!--</div>-->
-
-<div class="text-center container-sm">
-  <h5>Filter documents by title</h5>
-  <input class="form-control"
-         type="text"
-         [formControl]="titleFilter"
-         placeholder="Enter title or its part"/>
-  <div class="text-center">
-    <div class="btn-group me-2" role="group">
-      <button type="button" class="btn btn-primary" (click)="getAllDocuments(0)">Filter</button>
-    </div>
-    <div class="btn-group me-2" role="group">
-      <button type="button" class="btn btn-secondary" (click)="resetFilter()">Reset filter</button>
-    </div>
-  </div>
+<div>
+  <ngb-toast *ngIf="message" header="Notification" [autohide]="false" (hidden)="message.length === 0">
+    {{message}}
+  </ngb-toast>
 </div>
 
 <div *ngIf="documents.length > 0; then showDocuments else noDocuments"></div>
+
 <ng-template #showDocuments>
+  <div class="text-center documents-card">
+    <h5>Filter documents by title</h5>
+    <input class="form-control"
+           type="text"
+           [formControl]="titleFilter"
+           placeholder="Enter title or its part"/>
+    <div class="text-end">
+      <div class="btn-group me-2" role="group">
+        <button type="button" class="btn btn-primary" (click)="getAllDocuments(0)">Filter</button>
+      </div>
+      <div class="btn-group me-2" role="group">
+        <button type="button" class="btn btn-secondary" (click)="resetFilter()">Reset filter</button>
+      </div>
+    </div>
+  </div>
+
   <div class="text-center">
     <div
       *ngFor="let document of documents | paginate: { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }">
-      <div class="card" style="margin: 30px">
+      <div class="card documents-card">
         <div class="card-header d-flex justify-content-between">
-          <h5 class="card-title text-break">{{document.title}}
-            <i class="bi bi-info-circle" placement="right" [ngbTooltip]="documentInfo"></i>
-            <ng-template #documentInfo>
-              <div>
-                <div>Owner email: {{document.ownerEmail}}</div>
-                <div>Access: {{document.privateAccess? "private": "public"}}</div>
-                <div>Creation date: {{document.creationDate | date: dateFormat}}</div>
-              </div>
-            </ng-template>
-          </h5>
-
+          <h5 class="card-title text-break">{{document.title}}</h5>
           <button (click)="openModal(contentRename, document)">Rename
             <i class="bi bi-pencil"></i>
           </button>
         </div>
 
         <div class="card-body">
-          <div class="text-center">
+
+          <div class="text-left">
+            <div>Owner email: {{document.ownerEmail}}</div>
+            <div>Access: {{document.privateAccess ? "private" : "public"}}</div>
+            <div>Creation date: {{document.creationDate | date: dateFormat}}</div>
+          </div>
+
+          <div>
             <div class="btn-group me-2" role="group">
               <button class="btn btn-secondary" (click)="editDocument(document)">Edit</button>
             </div>
@@ -65,9 +51,6 @@
             </div>
           </div>
         </div>
-
-
-        <!--        <div class="text-end">Creation date: {{document.creationDate | date: dateFormat}}</div>-->
       </div>
     </div>
   </div>

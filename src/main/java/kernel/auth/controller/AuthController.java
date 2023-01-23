@@ -1,7 +1,6 @@
 package kernel.auth.controller;
 
-import com.thesis.thesis.misc.MessageResponse;
-import kernel.auth.exception.BadRequestException;
+import com.pdf.editor.misc.MessageResponse;
 import kernel.auth.exception.OAuth2AuthenticationProcessingException;
 import kernel.auth.model.AuthProvider;
 import kernel.auth.model.User;
@@ -67,7 +66,9 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new BadRequestException("Email address already in use!");
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Email address already in use!"));
         }
 
         User user = new UserBuilder()
@@ -84,6 +85,6 @@ public class AuthController {
                 .buildAndExpand(result.getId()).toUri();
 
         return ResponseEntity.created(location)
-                .body(new ApiResponse(true, "User registered successfully"));
+                .body(new ApiResponse(true, "User " + registerRequest.getName() + " registered successfully"));
     }
 }
