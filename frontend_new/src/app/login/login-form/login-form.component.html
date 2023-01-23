@@ -1,7 +1,6 @@
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <div class="form-group">
 
-
     <div class="alert alert-danger text-center" *ngIf="badLogin!=''">{{badLogin}}</div>
 
     <div class="form-item">
@@ -14,7 +13,7 @@
 
     <div class="form-item">
       <input type="password" placeholder="Password" formControlName="password"
-             class="form-control"[ngClass]="{ 'is-invalid': submitted && form.password.errors }"/>
+             class="form-control" [ngClass]="{ 'is-invalid': submitted && form.password.errors }"/>
       <div *ngIf="submitted && form.password.errors" class="invalid-feedback text-left">
         <div *ngIf="form.password.errors.required">Password is required</div>
       </div>
@@ -23,6 +22,5 @@
     <div class="form-item">
       <button type="submit" class="btn btn-block btn-primary">Login</button>
     </div>
-
   </div>
 </form>
