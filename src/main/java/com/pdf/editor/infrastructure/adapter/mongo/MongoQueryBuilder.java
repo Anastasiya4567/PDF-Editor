@@ -27,7 +27,7 @@ public class MongoQueryBuilder {
         criteria.orOperator(allCriteria);
 
         Query query = new Query(criteria);
-        query.fields().include("id", "title", "ownerEmail", "sourceCode", "privateAccess", "creationDate", "generatedDocumentId");
+        query.fields().include("id", "title", "ownerEmail", "sourceCode", "privateAccess", "creationDate");
         return query;
     }
 }
