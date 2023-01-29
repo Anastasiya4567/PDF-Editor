@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PDFDocument} from "../../models/PDFDocument";
 import {Page} from "ngx-pagination/dist/pagination-controls.directive";
 import {HttpClient} from "@angular/common/http";
@@ -44,7 +44,7 @@ export class AllDocumentsComponent implements OnInit {
   pageChange(pageIndex: number): void {
     if (pageIndex >= 0) {
       this.page = pageIndex;
-      this.getAllDocuments(pageIndex-1);
+      this.getAllDocuments(pageIndex - 1);
     }
   }
 
@@ -112,8 +112,8 @@ export class AllDocumentsComponent implements OnInit {
     this.documentService.renameDocument(this.document.id, this.newTitle.value).subscribe(
       (response: any) => {
         this.message = response.message;
-          this.getAllDocuments(this.page-1)
-        }, error => {
+        this.getAllDocuments(this.page - 1)
+      }, error => {
         console.log(error)
       })
   }

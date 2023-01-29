@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {ACCESS_TOKEN, API_BASE_URL} from "../../constants/app-constants.component";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {CookieService} from "ngx-cookie-service";
 import {GeneratedDocument} from "../../models/GeneratedDocument";
 import {MessageResponse} from "../../models/MessageResponse";
 import {Image} from "../../models/Image";
@@ -12,8 +11,7 @@ import {Image} from "../../models/Image";
 })
 export class GeneratedDocumentService {
 
-  constructor(private http: HttpClient,
-              private cookieService: CookieService) {
+  constructor(private http: HttpClient) {
   }
 
   getGeneratedDocument(documentId: string): Observable<GeneratedDocument> {
@@ -31,7 +29,7 @@ export class GeneratedDocumentService {
 
   private setHeaders() {
     const headers = new HttpHeaders();
-    return headers.append('Authorization', 'Bearer ' + this.cookieService.get(ACCESS_TOKEN));
+    return headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN));
   }
 
   getImages(documentId: string) {

@@ -39,5 +39,9 @@ public class DocumentRepository {
         return Option.ofOptional(documentPersistencePort.findById(id)).getOrElseThrow(
                 () -> new RuntimeException("No document with id: " + id + " found"));
     }
+
+    public List<PDFDocument> findAllByOwnerEmail(String email) {
+        return documentPersistencePort.findAllByOwnerEmail(email);
+    }
 }
 

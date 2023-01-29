@@ -14,4 +14,5 @@ public interface DocumentPersistencePort {
 
     void deleteById(String id);
 
+    List<PDFDocument> findAllByOwnerEmail(String email);
 }
