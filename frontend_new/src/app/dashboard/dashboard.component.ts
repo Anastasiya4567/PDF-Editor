@@ -11,24 +11,24 @@ import {ACCESS_TOKEN} from "../constants/app-constants.component";
 })
 export class DashboardComponent implements OnInit {
 
-  isAuthenticated = this.cookieService.check(ACCESS_TOKEN);
+  isAuthenticated = localStorage.getItem(ACCESS_TOKEN) != null;
 
   constructor(private cookieService: CookieService,
               private router: Router,
-              private accountService: AccountService) { }
+              private accountService: AccountService) { console.log(localStorage.getItem(ACCESS_TOKEN))}
 
   ngOnInit(): void {
 
     this.accountService.getIsLoggedIn.subscribe(value => {
       if (value) {
-        this.isAuthenticated = true;
+        this.isAuthenticated = value;
       }
     });
   }
 
   logout() {
-    this.cookieService.delete(ACCESS_TOKEN);
     this.isAuthenticated = false;
+    localStorage.removeItem(ACCESS_TOKEN);
     this.toLoginPage();
   }
 

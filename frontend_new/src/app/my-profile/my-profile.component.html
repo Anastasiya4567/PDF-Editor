@@ -1,3 +1,9 @@
+<div>
+  <ngb-toast *ngIf="message" header="Notification" [autohide]="false" (hidden)="message.length === 0">
+    {{message}}
+  </ngb-toast>
+</div>
+
 <div class="container-fluid">
   <div class="card card documents-card">
     <h4 class="card-header">My profile</h4>
@@ -23,6 +29,20 @@
         </div>
 
       </div>
+      <div class="text-center">
+        <button class="btn btn-dark" (click)="openModal(content)">Deactivate account</button>
+      </div>
     </div>
   </div>
 </div>
+
+<ng-template #content let-modal>
+  <div class="modal-header"></div>
+  <div class="modal-body">
+    <div class="form-group">Confirm deactivation</div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="deactivateAccount(modal)">Yes</button>
+    <button class="btn btn-primary" (click)="closeModal(modal)">No</button>
+  </div>
+</ng-template>

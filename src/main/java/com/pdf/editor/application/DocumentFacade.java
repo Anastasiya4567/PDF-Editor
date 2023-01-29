@@ -104,6 +104,11 @@ public class DocumentFacade {
         documentRepository.deleteById(pdfDocument.id);
     }
 
+    public void deleteAllDocuments(String email) {
+        List<PDFDocument> documents = documentRepository.findAllByOwnerEmail(email);
+        documents.forEach(this::deleteDocument);
+    }
+
     public void renameDocument(String newTitle, String id) {
         PDFDocument load = documentRepository.findById(id);
         load.title = newTitle;
